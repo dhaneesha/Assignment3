@@ -6,11 +6,12 @@
 package edu.unitec.data;
 
 public class Vegetable {
+	
 	public enum VegetableType {  
-		   PUMPKIN,
-		   CARROT,
-		   POTATO,
-		   SQUASH
+		PUMPKIN,
+		CARROT,
+		POTATO,
+		SQUASH
 		}
 	
 	public enum Mood {
