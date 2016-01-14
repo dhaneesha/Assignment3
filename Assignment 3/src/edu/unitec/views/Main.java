@@ -5,18 +5,33 @@
 
 package edu.unitec.views;
 
-import edu.unitec.assignment3.R;
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import edu.unitec.assignment3.R;
+import edu.unitec.data.Database;
 
 public class Main extends Activity {
 
+	Database helper = null;
+	SQLiteDatabase db = null;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
+        //db = helper.getWritableDatabase(); //commented out because I don't want to make the database yet    
+    }
+    
+    @Override
+    public void onDestroy()
+    {
+    	super.onDestroy();
+    	helper.close();
     }
 
     @Override
