@@ -110,7 +110,9 @@ public void run() {
 		canvas.drawColor(Color.BLACK);						
 		paint.setColor(Color.RED);			
 		
-		tempBitmap = Bitmap.createScaledBitmap(vegetableBitmap,20 * carrot.testingGrowth,30*carrot.testingGrowth,false);
+		
+		// I think this 2 lines of code is causing a problem
+		tempBitmap = Bitmap.createScaledBitmap(vegetableBitmap,20 + carrot.testingGrowth,30 + carrot.testingGrowth,false);
 		canvas.drawBitmap(tempBitmap, screenWidth/2,screenHeight/2, paint);
 		
 		}
