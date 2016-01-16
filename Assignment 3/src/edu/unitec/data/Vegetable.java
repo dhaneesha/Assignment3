@@ -12,10 +12,11 @@ import android.graphics.Paint;
 public class Vegetable {
 	
 	public enum VegetableType {  
-		PUMPKIN,
+		CABBAGE,
 		CARROT,
 		POTATO,
-		SQUASH
+		EGGPLANT,
+		NULL
 		}
 	
 	public enum Mood {
@@ -31,22 +32,30 @@ public class Vegetable {
 		TIMID,				
 	}
 	
+	private String typeStr;
+	private String personalityStr;
+	
+	private int vegeId;	//unique
+	
 	private VegetableType type; // unique
-	private double currentAge; 
+	private int currentAge; 
 	private double finalAge; // unique
-	private double waterLevel; 
-	private double foodLevel;
-	private double shadeLevel;
+	private int waterLevel; 
+	private int foodLevel;
+	private int shadeLevel;
 	//double temperature; // We dont need shade and temperature. Either will work
-	private int hungerRate; // unique
-	private int thirstRate; // unique
-	private int growthRate;
+	private double hungerRate; // unique
+	private double thirstRate; // unique
+	private double growthRate;
 	public int testingGrowth=1; // temporary varible to test the growth of Vege
 	
 	private Mood mood;
 	private Personality personality; // unique
 	private double size; // unique
 	private int location = 200;  // just initializing some value for ease
+	private String status = "LIVING";
+	private int condition = 100;
+	
 	private boolean cannibalize = false;
 	private boolean dead = false;
 	
@@ -60,13 +69,32 @@ public class Vegetable {
 	* Vegetable constructor.
 	* Sets up the default values for vegetables
 	*/
- 	public Vegetable ( )
+ 	public Vegetable ()
  	{
- 		currentAge = 0; 
- 		waterLevel = 100; 
- 		foodLevel = 100;
- 		shadeLevel = 100;
- 		mood = Mood.HAPPY;		
+ 		this.setCurrentAge(0); 
+ 		this.waterLevel = 100; 
+ 		this.foodLevel = 100;
+ 		this.shadeLevel = 100;
+ 		this.setMood(Mood.HAPPY);		
+ 	}
+ 	
+ 	//Used to 'load game'
+ 	public Vegetable (String savedVege)
+ 	{
+        String[] vg = savedVege.split(",");
+        
+        this.vegeId = (Integer.parseInt(vg[0]));
+        this.typeStr = (vg[1]);
+        this.currentAge = (Integer.parseInt(vg[2]));
+        this.waterLevel = Integer.parseInt(vg[3]);
+        this.foodLevel = Integer.parseInt(vg[4]);
+        this.shadeLevel = Integer.parseInt(vg[5]);
+        this.thirstRate = Double.parseDouble(vg[6]);
+        this.hungerRate = Double.parseDouble(vg[7]);
+        this.personalityStr = (vg[8]);
+        this.size = Double.parseDouble(vg[9]);
+        this.status = (vg[10]);
+        this.condition = Integer.parseInt(vg[11]);     
  	}
  	
 	/** 
@@ -77,44 +105,44 @@ public class Vegetable {
  	public void setVegetableType(VegetableType vType)
  	{		 		
  		switch (vType) {
-		case PUMPKIN:
-			 finalAge = 100; 
+		case CABBAGE:
+			 setFinalAge(100); 
 			 hungerRate = 1; 
 			 thirstRate = 1; 
 			 growthRate = 2;
-			 personality = Personality.HARDY; 
-			 size = 200; 
+			 setPersonality(Personality.HARDY); 
+			 setSize(200); 
 			break;
 		
 		case CARROT:
-			 finalAge = 50; 
+			 setFinalAge(50); 
 			 hungerRate = 5; 
 			 thirstRate = 5;
 			 growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
-			 personality = Personality.SASSY; 
-			 size = 130; 
+			 setPersonality(Personality.SASSY); 
+			 setSize(130); 
 			break;
 			
 		case POTATO:
-			 finalAge = 60; 
+			 setFinalAge(60); 
 			 hungerRate = 5; 
 			 thirstRate = 3;
 			 growthRate = 3;
-			 personality = Personality.TIMID; 
-			 size = 120; 
+			 setPersonality(Personality.TIMID); 
+			 setSize(120); 
 			break;
 		
-		case SQUASH:
-			 finalAge = 80; 
+		case EGGPLANT:
+			 setFinalAge(80); 
 			 hungerRate = 2; 
 			 thirstRate = 2;
 			 growthRate = 4;
-			 personality = Personality.HARDY; 
-			 size = 180; 
+			 setPersonality(Personality.HARDY); 
+			 setSize(180); 
 			break;
 
-//		default:
-//			break;
+		case NULL:
+			break;
 		}	
  	}
  	
@@ -123,7 +151,7 @@ public class Vegetable {
 	*/ 	
  	public void update ()
  	{
- 		finalAge--;
+ 		setFinalAge(getFinalAge() - 1);
  		foodLevel -= hungerRate;
  		waterLevel -= thirstRate;
  		
@@ -143,17 +171,17 @@ public class Vegetable {
  		
  		if (score >= 200)
  		{
- 			mood = Mood.HAPPY;
+ 			setMood(Mood.HAPPY);
  		}
  		
  		if (score >= 100)
  		{
- 			mood = Mood.OK;
+ 			setMood(Mood.OK);
  		}
  		
  		if (score <= 100)
  		{
- 			mood = Mood.SAD;
+ 			setMood(Mood.SAD);
  		}
  		
  		if (foodLevel < 5)
@@ -201,7 +229,7 @@ public class Vegetable {
 	*/ 
  	public void grow ()
  	{
- 		size += growthRate;
+ 		setSize(getSize() + growthRate);
  	}
  	
 	/** 
@@ -245,4 +273,143 @@ public class Vegetable {
  	{
  		testingGrowth++;
  	}
+
+ 	
+ 	
+	public String getTypeStr() {
+		return typeStr;
+	}
+
+	public void setTypeStr(String typeStr) {
+		this.typeStr = typeStr;
+	}
+
+	public String getPersonalityStr() {
+		return personalityStr;
+	}
+
+	public void setPersonalityStr(String personalityStr) {
+		this.personalityStr = personalityStr;
+	}
+
+	public int getVegeId() {
+		return vegeId;
+	}
+
+	public void setVegeId(int vegeId) {
+		this.vegeId = vegeId;
+	}
+
+	public VegetableType getType() {
+		return type;
+	}
+
+	public void setType(VegetableType type) {
+		this.type = type;
+	}
+
+	public int getCurrentAge() {
+		return currentAge;
+	}
+
+	public void setCurrentAge(int currentAge) {
+		this.currentAge = currentAge;
+	}
+
+	public double getFinalAge() {
+		return finalAge;
+	}
+
+	public void setFinalAge(double finalAge) {
+		this.finalAge = finalAge;
+	}
+
+	public Mood getMood() {
+		return mood;
+	}
+
+	public void setMood(Mood mood) {
+		this.mood = mood;
+	}
+
+	public Personality getPersonality() {
+		return personality;
+	}
+
+	public void setPersonality(Personality personality) {
+		this.personality = personality;
+	}
+
+	public double getSize() {
+		return size;
+	}
+
+	public void setSize(double size) {
+		this.size = size;
+	}
+
+	public int getLocation() {
+		return location;
+	}
+
+	public void setLocation(int location) {
+		this.location = location;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getCondition() {
+		return condition;
+	}
+
+	public void setCondition(int condition) {
+		this.condition = condition;
+	}
+	
+	public int getWaterLevel()
+	{
+		return waterLevel;
+	}
+	
+	public void setWaterLevel(int waterLevel){
+		this.waterLevel = waterLevel;
+	}
+	
+	public int getFoodLevel(){
+		return foodLevel;
+	}
+	
+	public void setFoodLevel(int foodLevel){
+		this.foodLevel = foodLevel;
+	}
+	
+	public int getShadeLevel(){
+		return shadeLevel;
+	}
+	
+	public void setShadeLevel(int shadeLevel){
+		this.shadeLevel = shadeLevel;
+	}
+	
+	public double getHungerRate(){
+		return hungerRate;
+	}
+	
+	public void setHungerRate(double hungerRate){
+		this.hungerRate = hungerRate;
+	}
+	
+	public double getThirstRate(){
+		return thirstRate;
+	}
+	
+	public void setThirstRate(double thirstRate){
+		this.thirstRate = thirstRate;
+	}
 }

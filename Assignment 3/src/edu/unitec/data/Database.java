@@ -40,7 +40,7 @@ public class Database{
 	 * @param condition		the condition of the vegetable
 	 * @return long			If long id is less than 0 then something went wrong
 	 */
-	public long insert(String type, int age, int waterLvl, int foodLvl, int shadeLvl, int thirstRate, int hungerRate, String personality, double size, String status, int condition)
+	public long insert(String type, int age, int waterLvl, int foodLvl, int shadeLvl, double thirstRate, double hungerRate, String personality, double size, String status, int condition)
 	{
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -82,7 +82,7 @@ public class Database{
 	 * @param newStatus			the new status ('DECEASED', 'LIVING')
 	 * @return int				and integer that counts how many rows were updated (should only be 1)
 	 */
-	public int update(int _vegeID, String newType, int newAge, int newWaterLvl, int newFoodLvl, int newShadeLvl, int newThirstRate, int newHungerRate, String newPersonality, double newSize, String newStatus, int newCondition)
+	public int update(int _vegeID, String newType, int newAge, int newWaterLvl, int newFoodLvl, int newShadeLvl, double newThirstRate, double newHungerRate, String newPersonality, double newSize, String newStatus, int newCondition)
 	{
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -243,14 +243,14 @@ public class Database{
 			int waterLvl = cursor.getInt(iWaterLvl);
 			int foodLvl = cursor.getInt(iFoodLvl);
 			int shadeLvl = cursor.getInt(iShadeLvl);
-			int thirstRate = cursor.getInt(iThirstRate);
-			int hungerRate = cursor.getInt(iHungerRate);
+			double thirstRate = cursor.getDouble(iThirstRate);
+			double hungerRate = cursor.getDouble(iHungerRate);
 			String personality = cursor.getString(iPersonality);
 			double size = cursor.getDouble(iSize);
 			String status = cursor.getString(iStatus);
 			int condition = cursor.getInt(iCondition);
 			
-			buffer.append(cid+" "+type+" "+age+" "+waterLvl+" "+foodLvl+" "+shadeLvl+" "+thirstRate+" "+hungerRate+" "+personality+" "+size+" "+status+" "+condition+"\n");
+			buffer.append(cid+","+type+","+age+","+waterLvl+","+foodLvl+","+shadeLvl+","+thirstRate+","+hungerRate+","+personality+","+size+","+status+","+condition+"#");
 		}
 		
 		return buffer;

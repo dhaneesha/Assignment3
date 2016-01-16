@@ -1,6 +1,8 @@
 /**
- * Our avatar selection activity
- * Created 13.01.16
+ * Avatar selection activity
+ * @author 	Lance Donnell and Dhaneesha Rajakaruna
+ * @version 1.0
+ * @since 	2016-01-13
  */
 
 package edu.unitec.views;
@@ -15,14 +17,17 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import edu.unitec.assignment3.R;
+import edu.unitec.data.Vegetable.VegetableType;
 
 public class AvatarView extends Activity implements OnTouchListener {
 
-	private boolean potatoSelected = false, carrotSelected = false, pumpkinSelected = false, squashSelected = false;
+	private boolean potatoSelected = false, carrotSelected = false, cabbageSelected = false, eggplantSelected = false;
 	private int picked = 0;
-	private ImageView btnPotato, btnCarrot, btnPumpkin, btnSquash;
+	private ImageView btnPotato, btnCarrot, btnCabbage, btnEggplant;
 	private Intent intent;
 	private int numberOfVeges = 2;
+	private boolean newGame = false;
+	private VegetableType choice1 = VegetableType.NULL, choice2 = VegetableType.NULL;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +36,13 @@ public class AvatarView extends Activity implements OnTouchListener {
 		
 		btnPotato = (ImageView) findViewById(R.id.btn_potato);
 		btnCarrot = (ImageView) findViewById(R.id.btn_carrot);
-		btnPumpkin = (ImageView) findViewById(R.id.btn_pumpkin);
-		btnSquash = (ImageView) findViewById(R.id.btn_squash);
+		btnCabbage = (ImageView) findViewById(R.id.btn_cabbage);
+		btnEggplant = (ImageView) findViewById(R.id.btn_eggplant);
 		
 		btnPotato.setOnTouchListener(this);
 		btnCarrot.setOnTouchListener(this);
-		btnPumpkin.setOnTouchListener(this);
-		btnSquash.setOnTouchListener(this);
+		btnCabbage.setOnTouchListener(this);
+		btnEggplant.setOnTouchListener(this);
 	}
 
 	@Override
@@ -62,52 +67,107 @@ public class AvatarView extends Activity implements OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
-		switch(v.getId())
+		//check if the action is down, otherwise the picked variable keeps changing based on how long the user holds down the button
+		if(event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-		case(R.id.btn_potato):
-			potatoSelected = !potatoSelected;
-			if(potatoSelected){
-				picked++;
+			switch(v.getId())
+			{
+				case(R.id.btn_potato):
+					potatoSelected = !potatoSelected;
+					if(potatoSelected){
+						picked++;
+					}
+					else{
+						picked--;
+					}
+					break;
+				case(R.id.btn_carrot):
+					carrotSelected = !carrotSelected;
+					if(carrotSelected){
+						picked++;
+					}
+					else{
+						picked--;
+					}
+					break;
+				case(R.id.btn_cabbage):
+					cabbageSelected = !cabbageSelected;
+					if(cabbageSelected){
+						picked++;
+					}
+					else{
+						picked--;
+					}
+					break;
+				case(R.id.btn_eggplant):
+					eggplantSelected = !eggplantSelected;
+					if(eggplantSelected){
+						picked++;
+					}
+					else{
+						picked--;
+					}
+					break;
+				}
 			}
-			else{
-				picked--;
+			
+			if(picked == numberOfVeges)
+			{	
+				finaliseChoices();
+	
+				newGame = true;
+				intent = new Intent(AvatarView.this, GameActivity.class);
+				intent.putExtra("GameState", newGame); 
+				intent.putExtra("choice1", choice1); 
+				intent.putExtra("choice2", choice2);
+				
+				this.startActivity(intent);
 			}
-			break;
-		case(R.id.btn_carrot):
-			carrotSelected = !carrotSelected;
-			if(carrotSelected){
-				picked++;
-			}
-			else{
-				picked--;
-			}
-			break;
-		case(R.id.btn_pumpkin):
-			pumpkinSelected = !pumpkinSelected;
-			if(pumpkinSelected){
-				picked++;
-			}
-			else{
-				picked--;
-			}
-			break;
-		case(R.id.btn_squash):
-			squashSelected = !squashSelected;
-			if(squashSelected){
-				picked++;
-			}
-			else{
-				picked--;
-			}
-			break;
+			
+			return false;
 		}
-		
-		if(picked == numberOfVeges)
+	
+	/**
+	 * Some poorly written code to find out which 2 vegetables the user picked - need to refine this
+	 */
+	private void finaliseChoices()
+	{
+		if(potatoSelected)
 		{
-			intent = new Intent(AvatarView.this, GameActivity.class);
-			this.startActivity(intent);
+			choice1 = VegetableType.POTATO;
 		}
-		
-		return false;
+		if(carrotSelected)
+		{
+			if(choice1 == VegetableType.NULL)
+			{
+				choice1 = VegetableType.CARROT;
+			}
+			else
+			{
+				choice2 = VegetableType.CARROT;
+			}
+		}
+		if(cabbageSelected)
+		{
+			if(choice1 == VegetableType.NULL)
+			{
+				choice1 = VegetableType.CABBAGE;
+			}
+			else
+			{
+				choice2 = VegetableType.CABBAGE;
+			}
+		}
+		if(eggplantSelected)
+		{
+			if(choice1 == VegetableType.NULL)
+			{
+				choice1 = VegetableType.EGGPLANT;
+			}
+			else
+			{
+				choice2 = VegetableType.EGGPLANT;
+			}
+		}
 	}
 }

@@ -16,11 +16,13 @@
         android:id="@+id/btn_carrot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/txtViewWelcome"
         android:layout_alignLeft="@+id/txtViewWelcome"
+        android:layout_alignStart="@+id/txtViewWelcome"
         android:layout_below="@+id/txtViewWelcome"
         android:layout_marginTop="22dp"
         android:contentDescription="@string/avatar_button"
+        android:minHeight="85dp"
+        android:minWidth="85dp"
         android:src="@drawable/carrot" />
 
     <ImageButton
@@ -31,26 +33,32 @@
         android:layout_alignRight="@+id/txtViewWelcome"
         android:layout_alignTop="@+id/btn_carrot"
         android:contentDescription="@string/avatar_button"
-        android:src="@drawable/carrot" />
+        android:minHeight="85dp"
+        android:minWidth="85dp"
+        android:src="@drawable/potato" />
 
     <ImageButton
-        android:id="@+id/btn_pumpkin"
+        android:id="@+id/btn_cabbage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/btn_carrot"
         android:layout_alignLeft="@+id/btn_carrot"
+        android:layout_alignStart="@+id/btn_carrot"
         android:layout_below="@+id/btn_carrot"
         android:contentDescription="@string/avatar_button"
-        android:src="@drawable/carrot" />
+        android:minHeight="85dp"
+        android:minWidth="85dp"
+        android:src="@drawable/cabbage" />
 
     <ImageButton
-        android:id="@+id/btn_squash"
+        android:id="@+id/btn_eggplant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/btn_potato"
         android:layout_alignLeft="@+id/btn_potato"
-        android:layout_alignTop="@+id/btn_pumpkin"
+        android:layout_alignStart="@+id/btn_potato"
+        android:layout_alignTop="@+id/btn_cabbage"
         android:contentDescription="@string/avatar_button"
-        android:src="@drawable/carrot" />
+        android:minHeight="85dp"
+        android:minWidth="85dp"
+        android:src="@drawable/eggplant" />
 
 </RelativeLayout>

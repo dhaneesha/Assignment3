@@ -23,6 +23,7 @@ public class Main extends Activity implements OnClickListener {
 	private Database helper;
 	private Button btnGetGrowing, btnGraveyard;
 	private Intent intent;
+	private boolean newGame = false;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,8 @@ public class Main extends Activity implements OnClickListener {
 	    	   }
 	    	   else {
 	    		  System.out.println("Is not empty!");
-		    	  intent = new Intent(Main.this, StatsView.class);
+		    	  intent = new Intent(Main.this, GameActivity.class);
+		    	  intent.putExtra("GameState", newGame);
 		    	  this.startActivity(intent);
 	    	   }
 	    	   
