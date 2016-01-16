@@ -5,6 +5,10 @@
 
 package edu.unitec.data;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
 public class Vegetable {
 	
 	public enum VegetableType {  
@@ -37,6 +41,7 @@ public class Vegetable {
 	private int hungerRate; // unique
 	private int thirstRate; // unique
 	private int growthRate;
+	public int testingGrowth=1; // temporary varible to test the growth of Vege
 	
 	private Mood mood;
 	private Personality personality; // unique
@@ -44,6 +49,13 @@ public class Vegetable {
 	private int location = 200;  // just initializing some value for ease
 	private boolean cannibalize = false;
 	private boolean dead = false;
+	
+	public Bitmap vegetableImage ;
+	
+	//
+	int width = 20;
+	int height = 30;
+	//
 	/** 
 	* Vegetable constructor.
 	* Sets up the default values for vegetables
@@ -71,16 +83,16 @@ public class Vegetable {
 			 thirstRate = 1; 
 			 growthRate = 2;
 			 personality = Personality.HARDY; 
-			 size = 100; 
+			 size = 200; 
 			break;
 		
 		case CARROT:
 			 finalAge = 50; 
 			 hungerRate = 5; 
 			 thirstRate = 5;
-			 growthRate = 3;
+			 growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
 			 personality = Personality.SASSY; 
-			 size = 30; 
+			 size = 130; 
 			break;
 			
 		case POTATO:
@@ -89,7 +101,7 @@ public class Vegetable {
 			 thirstRate = 3;
 			 growthRate = 3;
 			 personality = Personality.TIMID; 
-			 size = 20; 
+			 size = 120; 
 			break;
 		
 		case SQUASH:
@@ -98,7 +110,7 @@ public class Vegetable {
 			 thirstRate = 2;
 			 growthRate = 4;
 			 personality = Personality.HARDY; 
-			 size = 80; 
+			 size = 180; 
 			break;
 
 //		default:
@@ -198,5 +210,39 @@ public class Vegetable {
  	public void move ()
  	{
  		
+ 	}
+ 	
+	/** 
+	* Initialize an Image to the vegetable
+	*@param vegeBitmap The bitmap containing the image to be initialized
+	*/
+ 	public void setVegetableImage(Bitmap vegeBitmap)
+ 	{
+ 		vegetableImage= vegeBitmap;
+ 	}
+ 	
+	/** 
+	* draw the vegetable on a provided canvas at a given position with a givven paint object
+	* @param canvas the canvas to be drawn on
+	* @param x coordinate of the canvas
+	* @param y coordinate of the canvas
+	* @param paint object which has all the settings to draw the vegetable
+	* 
+	* Gives and error when tring to rescale with usin variables
+	* Probabaly due to threads clashing
+	* Might need to delete this method
+	* Alternative is drawing through GameView
+	*/
+ 	public void drawVegetable(Canvas canvas,float x, float y,Paint paint )
+ 	{		
+
+ 	}
+ 	
+	/** 
+	* Not in original plan. Just somthing to check communication and methods
+	*/
+ 	public void testingFeed()
+ 	{
+ 		testingGrowth++;
  	}
 }

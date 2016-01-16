@@ -8,22 +8,38 @@ package edu.unitec.views;
 import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import edu.unitec.assignment3.R;
 import edu.unitec.data.Database;
 
-public class Main extends Activity {
+public class Main extends Activity implements OnClickListener {
 
-	Database helper = null;
-	SQLiteDatabase db = null;
+	Database helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
+	GameView currentGame ;
+	private Button mButton;	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	
+    	Log.d("Error ", " Line 1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        currentGame = (GameView) findViewById(R.id.gameSurfaceView);
+    	Log.d("Error ", " Line 2");
+		mButton = (Button) findViewById(R.id.btn_Feed); // during creation initializes the on thouch listeners 
+		mButton.setOnClickListener(this);
+		
+		mButton = (Button) findViewById(R.id.btn_Update);
+		mButton.setOnClickListener(this);
+    	Log.d("Error ", " Line 3");
+		mButton = (Button) findViewById(R.id.btn_Testing);		
+		mButton.setOnClickListener(this);
         
-        helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
         //db = helper.getWritableDatabase(); //commented out because I don't want to make the database yet    
     }
     
@@ -31,7 +47,7 @@ public class Main extends Activity {
     public void onDestroy()
     {
     	super.onDestroy();
-    	helper.close();
+    	//helper.close();
     }
 
     @Override
@@ -52,4 +68,25 @@ public class Main extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+	@Override
+	public void onClick(View v) {
+		
+		if (v.getId() == R.id.btn_Update)  
+		{
+			
+		}
+		
+		if (v.getId() == R.id.btn_Feed)  
+		{
+			//currentGame.firstVege.grow();
+			currentGame.carrot.testingFeed();
+			
+		}
+		
+		if (v.getId() == R.id.btn_Testing)  
+		{
+
+		}
+	}
 }
