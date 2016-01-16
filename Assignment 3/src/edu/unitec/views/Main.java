@@ -19,7 +19,7 @@ import edu.unitec.data.Database;
 
 public class Main extends Activity implements OnClickListener {
 
-	Database helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
+	//Database helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
 	GameView currentGame ;
 	private Button mButton;	
 	
@@ -29,6 +29,7 @@ public class Main extends Activity implements OnClickListener {
     	Log.d("Error ", " Line 1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
         currentGame = (GameView) findViewById(R.id.gameSurfaceView);
     	Log.d("Error ", " Line 2");
 		mButton = (Button) findViewById(R.id.btn_Feed); // during creation initializes the on thouch listeners 
@@ -38,9 +39,7 @@ public class Main extends Activity implements OnClickListener {
 		mButton.setOnClickListener(this);
     	Log.d("Error ", " Line 3");
 		mButton = (Button) findViewById(R.id.btn_Testing);		
-		mButton.setOnClickListener(this);
-        
-        //db = helper.getWritableDatabase(); //commented out because I don't want to make the database yet    
+		mButton.setOnClickListener(this);  
     }
     
     @Override
