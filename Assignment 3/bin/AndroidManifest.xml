@@ -22,6 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.unitec.views.StatsView"
+            android:label="@string/title_activity_stats_view" >
+        </activity>
+        <activity
+            android:name="edu.unitec.views.AvatarView"
+            android:label="@string/title_activity_avatar_view" >
+        </activity>
+        <activity
+            android:name="edu.unitec.views.GameActivity"
+            android:label="@string/title_activity_game" >
+        </activity>
     </application>
 
 </manifest>

@@ -20,7 +20,8 @@ public class Database{
 	
 	public Database(Context context)
 	{
-		helper = new DatabaseHelper(context);	
+		System.out.println("Database constructor called");
+		helper = new DatabaseHelper(context);
 	}
 	
 	/**
@@ -278,19 +279,19 @@ public class Database{
 		private static final String TABLE_NAME = "VEGETABLE";
 		
 		//VERSION must be incremented by 1 each time changes are made to the database create string after it has been created the first time
-		private static final int DATABASE_VERSION = 1;	
+		private static final int DATABASE_VERSION = 5;	
 		private static final String UID = "_vegeId";
 		private static final String TYPE = "Type";
-		private static final String AGE = "0";
-		private static final String WATERLVL = "100";
-		private static final String FOODLVL = "100";
-		private static final String SHADELVL = "100";
-		private static final String THIRSTRATE = "1";
-		private static final String HUNGERRATE = "1";
-		private static final String PERSONALITY = "Default";
-		private static final String SIZE = "100";
-		private static final String STATUS = "LIVING";
-		private static final String CONDITION = "100";
+		private static final String AGE = "Age";
+		private static final String WATERLVL = "WaterLvl";
+		private static final String FOODLVL = "FoodLvl";
+		private static final String SHADELVL = "ShadeLvl";
+		private static final String THIRSTRATE = "ThirstRate";
+		private static final String HUNGERRATE = "HungerRate";
+		private static final String PERSONALITY = "Personality";
+		private static final String SIZE = "Size";
+		private static final String STATUS = "Status";
+		private static final String CONDITION = "Condition";
 		
 		public DatabaseHelper (Context context)
 		{
@@ -305,30 +306,33 @@ public class Database{
 		@Override
 		public void onCreate(SQLiteDatabase db)
 		{
-			String CREATE_TABLE = "CREATE TABLE "+TABLE_NAME+" ("
-					+Integer.parseInt(UID)+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+			System.out.println("OnCreate called");
+			String CREATE_TABLE = 
+					"CREATE TABLE "+TABLE_NAME+" ("
+					+UID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+TYPE+" VARCHAR(255), "
-					+Integer.parseInt(AGE)+" INTEGER, "
-					+Integer.parseInt(WATERLVL)+" INTEGER, "
-					+Integer.parseInt(FOODLVL)+" INTEGER, "
-					+Integer.parseInt(SHADELVL)+" INTEGER, "
-					+Integer.parseInt(THIRSTRATE)+" INTEGER, "
-					+Integer.parseInt(HUNGERRATE)+" INTEGER, "
+					+AGE+" INTEGER, "
+					+WATERLVL+" INTEGER, "
+					+FOODLVL+" INTEGER, "
+					+SHADELVL+" INTEGER, "
+					+THIRSTRATE+" INTEGER, "
+					+HUNGERRATE+" INTEGER, "
 					+PERSONALITY+" VARCHAR(255), "
-					+Double.parseDouble(SIZE)+" INTEGER, "
-					+STATUS+" VARCHAR(10), "+
-					+Integer.parseInt(CONDITION)+" INTEGER);";
-			try
-			{
+					+SIZE+" INTEGER, "
+					+STATUS+" VARCHAR(10), "
+					+CONDITION+" INTEGER);";
+			try {
 				db.execSQL(CREATE_TABLE);
-			} catch (SQLException e){
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			System.out.println(CREATE_TABLE);
 		}
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 		{
+			System.out.println("OnUpgrade called");
 			//Consider replacing this if we don't want to lose all the data
 			String DROP_TABLE = "DROP TABLE IF EXISTS "+TABLE_NAME+";";
 			

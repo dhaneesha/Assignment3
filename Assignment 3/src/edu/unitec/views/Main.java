@@ -1,14 +1,15 @@
 /**
  * Our opening menu
- * Created 13.01.16
+ * @author 	Lance Donnell and Dhaneesha Rajakaruna
+ * @version 1.0
+ * @since 	2016-01-13
  */
 
 package edu.unitec.views;
 
 import android.app.Activity;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,34 +20,29 @@ import edu.unitec.data.Database;
 
 public class Main extends Activity implements OnClickListener {
 
-	//Database helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
-	GameView currentGame ;
-	private Button mButton;	
+	private Database helper;
+	private Button btnGetGrowing, btnGraveyard;
+	private Intent intent;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	
-    	Log.d("Error ", " Line 1");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        currentGame = (GameView) findViewById(R.id.gameSurfaceView);
-    	Log.d("Error ", " Line 2");
-		mButton = (Button) findViewById(R.id.btn_Feed); // during creation initializes the on thouch listeners 
-		mButton.setOnClickListener(this);
-		
-		mButton = (Button) findViewById(R.id.btn_Update);
-		mButton.setOnClickListener(this);
-    	Log.d("Error ", " Line 3");
-		mButton = (Button) findViewById(R.id.btn_Testing);		
-		mButton.setOnClickListener(this);  
+        helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
+        
+        btnGetGrowing = (Button) findViewById(R.id.btnGetGrowing);
+        btnGraveyard = (Button) findViewById(R.id.btnGraveyard);
+        btnGetGrowing.setOnClickListener(this);
+        btnGraveyard.setOnClickListener(this);
     }
     
     @Override
     public void onDestroy()
     {
     	super.onDestroy();
-    	//helper.close();
+    	helper.close();
     }
 
     @Override
@@ -71,21 +67,27 @@ public class Main extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		
-		if (v.getId() == R.id.btn_Update)  
-		{
-			
-		}
-		
-		if (v.getId() == R.id.btn_Feed)  
-		{
-			//currentGame.firstVege.grow();
-			currentGame.carrot.testingFeed();
-			
-		}
-		
-		if (v.getId() == R.id.btn_Testing)  
-		{
-
-		}
+		switch (v.getId()) 
+	    {
+	       case R.id.btnGetGrowing:
+	    	   if(helper.isEmpty()) {
+	    		  System.out.println("Is empty!"); 
+		    	  intent = new Intent(Main.this, AvatarView.class);
+		    	  this.startActivity(intent);
+	    	   }
+	    	   else {
+	    		  System.out.println("Is not empty!");
+		    	  intent = new Intent(Main.this, StatsView.class);
+		    	  this.startActivity(intent);
+	    	   }
+	    	   
+	    	   break;
+	    	   
+	       case R.id.btnGraveyard:
+	    	   //intent = new Intent(this, GraveyardView.class);
+	    	   //this.startActivity(intent);
+	    	   System.out.println("Boo!");
+	    	   break;
+	    }
 	}
 }
