@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+	android:screenOrientation="portrait"
+    >	
+	<ImageButton
+	    android:id="@+id/btn_pumpkin"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/carrot"
+	    android:layout_gravity="center_vertical|center_horizontal"
+	    android:layout_toEndOf="@+id/btn_potato"
+	    android:layout_toRightOf="@+id/btn_potato"
+	    android:layout_centerVertical="true"
+	    />
+	<ImageButton
+	    android:id="@id/btn_potato"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/carrot"
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+	    />
+	<ImageButton
+	    android:id="@+id/btn_squash"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/carrot"
+	    android:layout_toLeftOf="@id/btn_potato"
+	    android:layout_toStartOf="@id/btn_potato"
+	    android:layout_centerVertical="true"
+	    />
+
+	<ImageButton
+	    android:id="@+id/btn_carrot"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/carrot" 
+	    android:layout_toLeftOf="@id/btn_squash"
+	    android:layout_toStartOf="@id/btn_squash"
+	    android:layout_centerVertical="true"
+	    />
+
+	<TextView
+	    android:id="@+id/txtViewWelcome"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/btn_pumpkin"
+	    android:layout_toStartOf="@+id/btn_pumpkin"	    
+	    android:text="Chose your Veges" />
+
+</RelativeLayout>
