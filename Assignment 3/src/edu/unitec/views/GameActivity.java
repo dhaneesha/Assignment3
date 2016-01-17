@@ -118,16 +118,28 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
 		Vegetable selectedVege = new Vegetable();	//The vegetable that was selected with the screen touch
 		Intent intent;
+		boolean vegeFound = false;
+		
 		for(int i = 0; i<veges.size(); i++)
 		{
 			//found it easiest to use this already established rect method (contains)
 			if(veges.get(i).getBoundingRect().contains((int)event.getX(), (int)event.getY())){
 				selectedVege = veges.get(i);
+				vegeFound = true;
 			}
 		}
 		
-		intent = new Intent(GameActivity.this, StatsActivity.class);
-  	  	this.startActivity(intent);
+		if(vegeFound)
+		{
+			intent = new Intent(GameActivity.this, StatsActivity.class);
+			intent.putExtra("age", selectedVege.getCurrentAge());
+			intent.putExtra("waterLevel", selectedVege.getWaterLevel());
+			intent.putExtra("foodLevel", selectedVege.getFoodLevel());
+			intent.putExtra("personality", selectedVege.getPersonality());
+			//intent.putExtra("size", selectedVege.getSize());
+			//intent.putExtra("mood", selectedVege.getMood());
+	  	  	this.startActivity(intent);
+		}
 
 		return false;
 	}

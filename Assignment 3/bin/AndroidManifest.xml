@@ -23,16 +23,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.unitec.views.StatsView"
+            android:name="edu.unitec.views.StatsActivity"
+            android:theme="@style/Theme.Transparent"
             android:label="@string/title_activity_stats_view" >
         </activity>
         <activity
-            android:name="edu.unitec.views.AvatarView"
+            android:name="edu.unitec.views.AvatarActivity"
             android:label="@string/title_activity_avatar_view" >
         </activity>
         <activity
             android:name="edu.unitec.views.GameActivity"
-            android:label="@string/title_activity_game" >
+            android:label="@string/title_activity_game"
+            android:parentActivityName="edu.unitec.views.Main" >
+        </activity>
+        <activity
+            android:name="edu.unitec.views.Graveyard"
+            android:label="@string/title_activity_graveyard" >
+        </activity>
+        <activity
+            android:name="edu.unitec.views.GraveyardActivity"
+            android:label="@string/title_activity_graveyard_view" >
         </activity>
     </application>
 

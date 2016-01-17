@@ -114,7 +114,10 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 				{
 					//paint.setColor(Color.RED);	
 					canvas.drawColor(Color.BLACK);
-					Vegetable.drawVegetables(canvas, veges);	//need to implement this better so it's not a static method		
+					for(int i = 0; i<veges.size(); i++)
+					{
+						veges.get(i).drawVegetables(canvas, veges);	//need to implement this better so it's not a static method		
+					}
 				}
 					
 			}

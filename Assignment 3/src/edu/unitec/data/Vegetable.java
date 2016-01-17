@@ -217,7 +217,7 @@ public class Vegetable {
  		setBoundingRect(new Rect(xPosOffset,heightMax-vegetableImage.getHeight()*3,xPosOffset+vegetableImage.getWidth(), heightMax-vegetableImage.getHeight()*2));
  	}
  	
- 	public static void drawVegetables(Canvas canvas, ArrayList<Vegetable> veges)
+ 	public void drawVegetables(Canvas canvas, ArrayList<Vegetable> veges)
  	{
  		for(int i = 0; i<veges.size(); i++)
  		{
