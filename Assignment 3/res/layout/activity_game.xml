@@ -1,16 +1,52 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.unitec.views.GameActivity" >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
-</RelativeLayout>
+    android:orientation="vertical" >
+     
+	<edu.unitec.views.GameManager
+    android:id="@+id/gameSurfaceView"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" />
+    
+    <Button
+    android:id="@+id/btn_Feed"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="35dip"
+    android:minWidth="50dip"
+    android:text="@string/action_feed"
+    android:layout_gravity="bottom|start"
+    />
+    
+    <Button
+    android:id="@+id/btn_Irrigate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="35dip"
+    android:minWidth="50dip"
+    android:text="@string/action_irrigate"
+    android:layout_gravity="bottom|center"
+    />
+        
+    <Button
+    android:id="@+id/btn_Update"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="35dip"
+    android:minWidth="50dip"
+    android:text="Update"
+    android:layout_gravity="bottom|end"
+    />
+    
+    <Button
+    android:id="@+id/btn_Testing"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="35dip"
+    android:minWidth="50dip"
+    android:text="Testing"
+    android:layout_gravity="top|end"
+    />
+	
+</FrameLayout>

@@ -10,60 +10,37 @@ package edu.unitec.views;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import edu.unitec.assignment3.R;
 import edu.unitec.data.Database;
 import edu.unitec.data.Vegetable;
 import edu.unitec.data.Vegetable.VegetableType;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements OnTouchListener {
 
 	private Database helper;
-	private Vegetable vegeOne = new Vegetable(), vegeTwo = new Vegetable();
-	private ArrayList<Vegetable> veges;
+	private Vegetable vegeOne, vegeTwo;
+	private ArrayList<Vegetable> veges = new ArrayList<Vegetable>();
+	private GameManager gameManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
-		helper = new Database(this);
+
+		helper = new Database(this);	
+		init();
 		
-		//both intents (from Main and AvatarSelection) that get you here send a newGameState value
-		boolean newGameState = getIntent().getBooleanExtra("GameState", false);
-		
-		//if it is a new game, create new vegetables based on player's choice
-		if(newGameState){
-			VegetableType choice1 = (VegetableType) getIntent().getSerializableExtra("choice1");
-			VegetableType choice2 = (VegetableType) getIntent().getSerializableExtra("choice2");
-			
-			vegeOne.setVegetableType(choice1);
-			vegeTwo.setVegetableType(choice2);
-			
-			//Add the new veges to the database
-			helper.insert(choice1.toString(), vegeOne.getCurrentAge(), vegeOne.getWaterLevel(), vegeOne.getFoodLevel(), vegeOne.getShadeLevel(), vegeOne.getThirstRate(), vegeOne.getHungerRate(), vegeOne.getPersonalityStr(), vegeOne.getSize(), vegeOne.getStatus(), vegeOne.getCondition());
-			helper.insert(choice2.toString(), vegeTwo.getCurrentAge(), vegeTwo.getWaterLevel(), vegeTwo.getFoodLevel(), vegeTwo.getShadeLevel(), vegeTwo.getThirstRate(), vegeTwo.getHungerRate(), vegeTwo.getPersonalityStr(), vegeTwo.getSize(), vegeTwo.getStatus(), vegeTwo.getCondition());
-			
-			//Add the veges to the arraylist
-			veges.add(vegeOne); veges.add(vegeTwo);
-		
-		//if it is not a new game, load in all living vegetables and create objects for them
-		}else{
-			
-			String living = helper.getLiving();
-			String[] livingVeges = living.split("#");
-            for (int i = 0; i<livingVeges.length; i++)
-            {
-            	//System.out.println(livingVeges[i]);
-            	
-                if (livingVeges[i] != ""){
-                    veges.add(new Vegetable(livingVeges[i]));
-                }
-            }			
-		}
-		
-		helper.close();
+		gameManager = (GameManager) findViewById(R.id.gameSurfaceView);
+		gameManager.setVeges(veges);
+		gameManager.setOnTouchListener(this);
 	}
 
 	@Override
@@ -83,5 +60,75 @@ public class GameActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/**
+	 * Initialize the game by either creating or loading in the player's Vegetables
+	 */
+	private void init()
+	{
+		//both intents (from Main and AvatarSelection) that get you here send a newGameState value
+		boolean newGameState = getIntent().getBooleanExtra("GameState", false);
+		
+		//if it is a new game, create new vegetables based on player's choice
+		if(newGameState){
+			VegetableType choice1 = (VegetableType) getIntent().getSerializableExtra("choice1");
+			VegetableType choice2 = (VegetableType) getIntent().getSerializableExtra("choice2");
+			
+			vegeOne = new Vegetable(this, choice1);
+			vegeTwo = new Vegetable(this, choice2);
+						
+			//Add the new veges to the database
+			long first = helper.insert(choice1.toString(), vegeOne.getCurrentAge(), vegeOne.getWaterLevel(), vegeOne.getFoodLevel(), vegeOne.getShadeLevel(), vegeOne.getThirstRate(), vegeOne.getHungerRate(), vegeOne.getPersonality().toString(), vegeOne.getSize(), vegeOne.getStatus(), vegeOne.getCondition());
+			long second = helper.insert(choice2.toString(), vegeTwo.getCurrentAge(), vegeTwo.getWaterLevel(), vegeTwo.getFoodLevel(), vegeTwo.getShadeLevel(), vegeTwo.getThirstRate(), vegeTwo.getHungerRate(), vegeTwo.getPersonality().toString(), vegeTwo.getSize(), vegeTwo.getStatus(), vegeTwo.getCondition());
+			
+			if(first < 0)
+			{
+				Log.e("ERROR", "First went wrong.");
+			}
+			if(second < 0)
+			{
+				Log.e("ERROR", "Second went wrong.");
+			}
+			
+			//Add the veges to the arraylist
+			veges.add(vegeOne); 
+			veges.add(vegeTwo);
+		
+		//if it is not a new game, load in all living vegetables and create objects for them
+		}else{
+			
+			String living = helper.getLiving();
+			String[] livingVeges = living.split("#");
+			
+            for (int i = 0; i<livingVeges.length; i++)
+            {
+                if (livingVeges[i] != ""){
+                    veges.add(new Vegetable(livingVeges[i], this));
+                }
+            }			
+		}
+		
+		helper.close();
+	}
+
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		Vegetable selectedVege = new Vegetable();	//The vegetable that was selected with the screen touch
+		Intent intent;
+		for(int i = 0; i<veges.size(); i++)
+		{
+			//found it easiest to use this already established rect method (contains)
+			if(veges.get(i).getBoundingRect().contains((int)event.getX(), (int)event.getY())){
+				selectedVege = veges.get(i);
+			}
+		}
+		
+		intent = new Intent(GameActivity.this, StatsActivity.class);
+  	  	this.startActivity(intent);
+
+		return false;
 	}
 }

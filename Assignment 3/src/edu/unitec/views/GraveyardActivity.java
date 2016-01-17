@@ -1,26 +1,23 @@
 package edu.unitec.views;
 
 import edu.unitec.assignment3.R;
-import edu.unitec.assignment3.R.id;
-import edu.unitec.assignment3.R.layout;
-import edu.unitec.assignment3.R.menu;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class StatsView extends Activity {
+public class GraveyardActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_stats_view);
+		setContentView(R.layout.activity_graveyard_view);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.stats_view, menu);
+		getMenuInflater().inflate(R.menu.graveyard_view, menu);
 		return true;
 	}
 

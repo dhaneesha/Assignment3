@@ -1,86 +1,111 @@
 /**
  * Our model class to store all the vegetable data
- * Created 13.01.16
+ * @author 	Lance Donnell and Dhaneesha Rajakaruna
+ * @version 1.0
+ * @since 	2016-01-13
  */
 
 package edu.unitec.data;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 public class Vegetable {
 	
-	public enum VegetableType {  
-		CABBAGE,
-		CARROT,
-		POTATO,
-		EGGPLANT,
-		NULL
-		}
+	//Vegetable variables appear in the order that they are entered in the database, for ease of reference
 	
-	public enum Mood {
-		HAPPY,
-		OK,
-		SAD,
-		ANGRY  // can delete this if we dont need 
-		}
+	//ID
+	private int vegeId;	//unique - auto-incremented in database, not initialized here, used for the database update method
 	
-	public enum Personality {
-		SASSY,
-		HARDY,
-		TIMID,				
-	}
-	
-	private String typeStr;
-	private String personalityStr;
-	
-	private int vegeId;	//unique
-	
+	//TYPE
+	public enum VegetableType {CABBAGE, CARROT, POTATO, EGGPLANT, NULL}	//used to determine what type the player selected, NULL is used for calculations
 	private VegetableType type; // unique
+	private String typeStr;	//the type of the vegetable as a string, used to convert to an enum upon loading
+	
+	//AGE
 	private int currentAge; 
 	private double finalAge; // unique
+	
+	//WATERLVL, FOODLVL, SHADELVL
 	private int waterLevel; 
 	private int foodLevel;
 	private int shadeLevel;
-	//double temperature; // We dont need shade and temperature. Either will work
-	private double hungerRate; // unique
-	private double thirstRate; // unique
-	private double growthRate;
-	public int testingGrowth=1; // temporary varible to test the growth of Vege
 	
+	//HUNGERRATE, THIRSTRATE
+	private double hungerRate; 
+	private double thirstRate; 
+	private double growthRate;	//Not used as at 17.1.16
+	
+	//PERSONALITY
+	public enum Personality {SASSY,	HARDY, TIMID}
+	private String personalityStr;	//the personality of the vegetable as a string, used when loading the game
+	private Personality personality; 
+	
+	//SIZE
+	private double size;
+	
+	//STATUS
+	private String status;	//defaults to LIVING (two values are LIVING and DEAD)
+	private boolean dead = false;	//not used as at 17.1.16
+	
+	//CONDITION
+	private int condition;
+	
+	//The following values are not recorded in the database recorded in database:
+	public enum Mood {HAPPY, OK, SAD, ANGRY}	//determines the mood of the vegetable
+	//Mood will be defined based on current statistics
 	private Mood mood;
-	private Personality personality; // unique
-	private double size; // unique
-	private int location = 200;  // just initializing some value for ease
-	private String status = "LIVING";
-	private int condition = 100;
 	
 	private boolean cannibalize = false;
-	private boolean dead = false;
+	private Bitmap vegetableImage;
+
+	//location and dimensions of the vegetable
+	private int locationX;
+	private int locationY = 100;
+	private int width = 20;
+	private int height = 30;
+	//A rectangle that fits around the vegetable, used for scaling and positioning
+	private Rect boundingRect;
 	
-	public Bitmap vegetableImage ;
+	private Activity activity;
 	
-	//
-	int width = 20;
-	int height = 30;
-	//
+	public Vegetable ()
+	{
+		//default constructor
+	}
+	
 	/** 
 	* Vegetable constructor.
-	* Sets up the default values for vegetables
+	* Sets up the default values that every vegetable shares
 	*/
- 	public Vegetable ()
+ 	public Vegetable (Activity activity, VegetableType vType)
  	{
- 		this.setCurrentAge(0); 
+ 		this.activity = activity;
+ 		this.type = vType;
+ 		
+ 		this.currentAge = 0; 
  		this.waterLevel = 100; 
  		this.foodLevel = 100;
  		this.shadeLevel = 100;
- 		this.setMood(Mood.HAPPY);		
+ 		this.mood = Mood.HAPPY;
+ 		this.status = "LIVING";
+ 		this.condition = 100;
+ 		
+ 		setVegetableStats();
+ 		setPosition();
  	}
  	
  	//Used to 'load game'
- 	public Vegetable (String savedVege)
+ 	public Vegetable (String savedVege, Activity activity)
  	{
+ 		this.activity = activity;
         String[] vg = savedVege.split(",");
         
         this.vegeId = (Integer.parseInt(vg[0]));
@@ -94,56 +119,110 @@ public class Vegetable {
         this.personalityStr = (vg[8]);
         this.size = Double.parseDouble(vg[9]);
         this.status = (vg[10]);
-        this.condition = Integer.parseInt(vg[11]);     
+        this.condition = Integer.parseInt(vg[11]);
+              
+        updateTypeAndPersonality();
+        setVegetableStats();
+        setPosition();
+ 	}
+ 	
+ 	private void updateTypeAndPersonality()
+ 	{
+        if(personalityStr.equals("HARDY"))
+        	this.personality = Personality.HARDY;
+        if(personalityStr.equals("SASSY"))
+        	this.personality = Personality.SASSY;
+        if(personalityStr.equals("TIMID"))
+        	this.personality = Personality.TIMID; 
+        
+        if(typeStr.equals("CABBAGE"))
+        	this.type = VegetableType.CABBAGE;
+        if(typeStr.equals("CARROT"))
+        	this.type = VegetableType.CARROT;
+        if(typeStr.equals("POTATO"))
+        	this.type = VegetableType.POTATO;
+        if(typeStr.equals("EGGPLANT"))
+        	this.type = VegetableType.EGGPLANT;
  	}
  	
 	/** 
 	* Setup unique values depending on vegetable type.
-	* Sets up the default values for vegetables
-	* @param vType values will be initialized depending on the VegetableType
+	* and the default values for vegetables
 	*/ 	
- 	public void setVegetableType(VegetableType vType)
+ 	private void setVegetableStats()
  	{		 		
- 		switch (vType) {
+ 		switch (type) {
 		case CABBAGE:
-			 setFinalAge(100); 
-			 hungerRate = 1; 
-			 thirstRate = 1; 
-			 growthRate = 2;
-			 setPersonality(Personality.HARDY); 
-			 setSize(200); 
-			break;
+			 this.finalAge = 100; 
+			 this.hungerRate = 1; 
+			 this.thirstRate = 1; 
+			 this.growthRate = 2;
+			 this.personality = Personality.HARDY; 
+			 this.size = 200;
+			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.cabbage);			 
+			 break;
 		
 		case CARROT:
-			 setFinalAge(50); 
-			 hungerRate = 5; 
-			 thirstRate = 5;
-			 growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
-			 setPersonality(Personality.SASSY); 
-			 setSize(130); 
-			break;
+			 this.finalAge = 50; 
+			 this.hungerRate = 5; 
+			 this.thirstRate = 5;
+			 this.growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
+			 this.personality = Personality.SASSY; 
+			 this.size = 130;
+			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.carrot);
+			 break;
 			
 		case POTATO:
-			 setFinalAge(60); 
-			 hungerRate = 5; 
-			 thirstRate = 3;
-			 growthRate = 3;
-			 setPersonality(Personality.TIMID); 
-			 setSize(120); 
-			break;
+			 this.finalAge = 60; 
+			 this.hungerRate = 5; 
+			 this.thirstRate = 3;
+			 this.growthRate = 3;
+			 this.personality = Personality.TIMID; 
+			 this.size = 120; 
+			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.potato);
+			 break;
 		
 		case EGGPLANT:
-			 setFinalAge(80); 
-			 hungerRate = 2; 
-			 thirstRate = 2;
-			 growthRate = 4;
-			 setPersonality(Personality.HARDY); 
-			 setSize(180); 
-			break;
+			 this.finalAge = 80; 
+			 this.hungerRate = 2; 
+			 this.thirstRate = 2;
+			 this.growthRate = 4;
+			 this.personality = Personality.HARDY; 
+			 this.size = 180;
+			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eggplant);
+			 break;
 
 		case NULL:
 			break;
-		}	
+		}
+ 	}
+ 	
+ 	public void setPosition()
+ 	{
+ 		int widthMax = activity.getResources().getDisplayMetrics().widthPixels;
+ 		int heightMax = activity.getResources().getDisplayMetrics().heightPixels;
+ 		
+ 		Random r = new Random();
+ 		int xPosOffset = r.nextInt(widthMax + 1);
+ 		if(xPosOffset + vegetableImage.getWidth() >= widthMax)
+ 		{
+ 			xPosOffset -= vegetableImage.getWidth();
+ 		}
+ 		else if (xPosOffset - vegetableImage.getWidth() <= 0)
+ 		{
+ 			xPosOffset += vegetableImage.getWidth();
+ 		}
+ 		
+ 		//Not sure why the values had to be multiplied at this point
+ 		setBoundingRect(new Rect(xPosOffset,heightMax-vegetableImage.getHeight()*3,xPosOffset+vegetableImage.getWidth(), heightMax-vegetableImage.getHeight()*2));
+ 	}
+ 	
+ 	public static void drawVegetables(Canvas canvas, ArrayList<Vegetable> veges)
+ 	{
+ 		for(int i = 0; i<veges.size(); i++)
+ 		{
+ 			canvas.drawBitmap(veges.get(i).getVegetableImage(), null, veges.get(i).getBoundingRect(), null);
+ 		}
  	}
  	
 	/** 
@@ -151,15 +230,15 @@ public class Vegetable {
 	*/ 	
  	public void update ()
  	{
- 		setFinalAge(getFinalAge() - 1);
- 		foodLevel -= hungerRate;
- 		waterLevel -= thirstRate;
+ 		this.finalAge -= 1;
+ 		this.foodLevel -= hungerRate;
+ 		this.waterLevel -= thirstRate;
  		
  		if (!isDead())  // if vegetable is alive 
  		{
  			grow (); // it grows
  			calculateMood();
- 		}				
+ 		}
  	}
  	
 	/** 
@@ -229,11 +308,11 @@ public class Vegetable {
 	*/ 
  	public void grow ()
  	{
- 		setSize(getSize() + growthRate);
+ 		size += growthRate;
  	}
  	
 	/** 
-	* I dont understand the purpose of this method to impliment it 
+	* I dont understand the purpose of this method to implement it 
 	*/
  	public void move ()
  	{
@@ -246,32 +325,37 @@ public class Vegetable {
 	*/
  	public void setVegetableImage(Bitmap vegeBitmap)
  	{
- 		vegetableImage= vegeBitmap;
+ 		vegetableImage = vegeBitmap;
  	}
  	
+	public Bitmap getVegetableImage()
+	{
+		return vegetableImage;
+	}
+ 	
 	/** 
-	* draw the vegetable on a provided canvas at a given position with a givven paint object
+	* draw the vegetable on a provided canvas at a given position with a given paint object
 	* @param canvas the canvas to be drawn on
 	* @param x coordinate of the canvas
 	* @param y coordinate of the canvas
 	* @param paint object which has all the settings to draw the vegetable
 	* 
-	* Gives and error when tring to rescale with usin variables
+	* Gives an error when tring to rescale when using variables
 	* Probabaly due to threads clashing
 	* Might need to delete this method
 	* Alternative is drawing through GameView
 	*/
  	public void drawVegetable(Canvas canvas,float x, float y,Paint paint )
  	{		
-
+ 		
  	}
  	
 	/** 
-	* Not in original plan. Just somthing to check communication and methods
+	* Not in original plan. Just something to check communication and methods
 	*/
  	public void testingFeed()
  	{
- 		testingGrowth++;
+ 		//testingGrowth++;
  	}
 
  	
@@ -348,14 +432,6 @@ public class Vegetable {
 		this.size = size;
 	}
 
-	public int getLocation() {
-		return location;
-	}
-
-	public void setLocation(int location) {
-		this.location = location;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -411,5 +487,29 @@ public class Vegetable {
 	
 	public void setThirstRate(double thirstRate){
 		this.thirstRate = thirstRate;
+	}
+
+	public int getLocationX() {
+		return locationX;
+	}
+
+	public void setLocationX(int locationX) {
+		this.locationX = locationX;
+	}
+
+	public int getLocationY() {
+		return locationY;
+	}
+
+	public void setLocationY(int locationY) {
+		this.locationY = locationY;
+	}
+
+	public Rect getBoundingRect() {
+		return boundingRect;
+	}
+
+	public void setBoundingRect(Rect boundingRect) {
+		this.boundingRect = boundingRect;
 	}
 }

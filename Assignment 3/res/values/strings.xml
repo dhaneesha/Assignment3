@@ -14,5 +14,7 @@
     <string name="avatar_button">Avatar Button</string>
     <string name="vege_prompt">Pick two veges</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_graveyard">Graveyard</string>
+    <string name="title_activity_graveyard_view">GraveyardView</string>
 
 </resources>

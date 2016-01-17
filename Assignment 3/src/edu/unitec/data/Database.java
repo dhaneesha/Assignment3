@@ -20,7 +20,6 @@ public class Database{
 	
 	public Database(Context context)
 	{
-		System.out.println("Database constructor called");
 		helper = new DatabaseHelper(context);
 	}
 	
@@ -45,7 +44,6 @@ public class Database{
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		
-		//no need to cast the types here because they are taken from the parameters
 		values.put(DatabaseHelper.TYPE, type);
 		values.put(DatabaseHelper.AGE, age);
 		values.put(DatabaseHelper.WATERLVL, waterLvl);
@@ -114,8 +112,8 @@ public class Database{
 		SQLiteDatabase db = helper.getWritableDatabase();
 		String [] columns = {
 				DatabaseHelper.UID,
-				DatabaseHelper.AGE,
 				DatabaseHelper.TYPE,
+				DatabaseHelper.AGE,
 				DatabaseHelper.WATERLVL,
 				DatabaseHelper.FOODLVL,
 				DatabaseHelper.SHADELVL,
@@ -165,8 +163,8 @@ public class Database{
 		SQLiteDatabase db = helper.getWritableDatabase();
 		String [] columns = {
 				DatabaseHelper.UID,
-				DatabaseHelper.AGE,
 				DatabaseHelper.TYPE,
+				DatabaseHelper.AGE,
 				DatabaseHelper.WATERLVL,
 				DatabaseHelper.FOODLVL,
 				DatabaseHelper.SHADELVL,
@@ -193,8 +191,8 @@ public class Database{
 		SQLiteDatabase db = helper.getWritableDatabase();
 		String [] columns = {
 				DatabaseHelper.UID,
-				DatabaseHelper.AGE,
 				DatabaseHelper.TYPE,
+				DatabaseHelper.AGE,
 				DatabaseHelper.WATERLVL,
 				DatabaseHelper.FOODLVL,
 				DatabaseHelper.SHADELVL,
@@ -205,6 +203,9 @@ public class Database{
 				DatabaseHelper.STATUS,
 				DatabaseHelper.CONDITION };
 		Cursor cursor = db.query(DatabaseHelper.TABLE_NAME, columns, DatabaseHelper.STATUS + "='LIVING'", null, null, null, null, null);
+		
+		System.out.println(db.query(DatabaseHelper.TABLE_NAME, columns, DatabaseHelper.STATUS + "='LIVING'", null, null, null, null, null));
+		
 		StringBuffer buffer = new StringBuffer();
 		buffer = addToBuffer(cursor, buffer);
 		db.close();
@@ -220,13 +221,13 @@ public class Database{
 	 */
 	private StringBuffer addToBuffer(Cursor cursor, StringBuffer buffer)
 	{
-		int iId, iAge, iType, iWaterLvl, iFoodLvl, iShadeLvl, iThirstRate, iHungerRate, iPersonality, iSize, iStatus, iCondition;
+		int iId, iType, iAge, iWaterLvl, iFoodLvl, iShadeLvl, iThirstRate, iHungerRate, iPersonality, iSize, iStatus, iCondition;
 		
 		while(cursor.moveToNext())
 		{
 			iId = cursor.getColumnIndex(DatabaseHelper.UID);
-			iAge = cursor.getColumnIndex(DatabaseHelper.AGE);
 			iType = cursor.getColumnIndex(DatabaseHelper.TYPE);
+			iAge = cursor.getColumnIndex(DatabaseHelper.AGE);
 			iWaterLvl = cursor.getColumnIndex(DatabaseHelper.WATERLVL);
 			iFoodLvl = cursor.getColumnIndex(DatabaseHelper.FOODLVL);
 			iShadeLvl = cursor.getColumnIndex(DatabaseHelper.SHADELVL);
@@ -263,6 +264,18 @@ public class Database{
 	public void close()
 	{
 		helper.close();
+	}
+	
+	/**
+	 * Remove all users and groups from database.
+	 * Adding for testing purposes
+	 */
+	public void removeAll()
+	{
+	    // db.delete(String tableName, String whereClause, String[] whereArgs);
+	    // If whereClause is null, it will delete all rows.
+	    SQLiteDatabase db = helper.getWritableDatabase();
+	    db.delete(DatabaseHelper.TABLE_NAME, null, null);
 	}
 	
 	/**
@@ -306,7 +319,6 @@ public class Database{
 		@Override
 		public void onCreate(SQLiteDatabase db)
 		{
-			System.out.println("OnCreate called");
 			String CREATE_TABLE = 
 					"CREATE TABLE "+TABLE_NAME+" ("
 					+UID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -332,7 +344,6 @@ public class Database{
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 		{
-			System.out.println("OnUpgrade called");
 			//Consider replacing this if we don't want to lose all the data
 			String DROP_TABLE = "DROP TABLE IF EXISTS "+TABLE_NAME+";";
 			

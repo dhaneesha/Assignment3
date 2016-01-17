@@ -71,13 +71,16 @@ public class Main extends Activity implements OnClickListener {
 		switch (v.getId()) 
 	    {
 	       case R.id.btnGetGrowing:
+	    	   
+	    	   //helper.removeAll(); //Uncomment this to simulate a new game (for testing) - it clears the VEGETABLE table
+	    	   
+	    	   //is empty, so let the user pick their vegetables
 	    	   if(helper.isEmpty()) {
-	    		  System.out.println("Is empty!"); 
-		    	  intent = new Intent(Main.this, AvatarView.class);
+		    	  intent = new Intent(Main.this, AvatarActivity.class);
 		    	  this.startActivity(intent);
 	    	   }
+	    	   //is not empty, so load game
 	    	   else {
-	    		  System.out.println("Is not empty!");
 		    	  intent = new Intent(Main.this, GameActivity.class);
 		    	  intent.putExtra("GameState", newGame);
 		    	  this.startActivity(intent);
@@ -86,9 +89,8 @@ public class Main extends Activity implements OnClickListener {
 	    	   break;
 	    	   
 	       case R.id.btnGraveyard:
-	    	   //intent = new Intent(this, GraveyardView.class);
-	    	   //this.startActivity(intent);
-	    	   System.out.println("Boo!");
+	    	   intent = new Intent(this, GraveyardActivity.class);
+	    	   this.startActivity(intent);
 	    	   break;
 	    }
 	}

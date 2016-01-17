@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import edu.unitec.assignment3.R;
 import edu.unitec.data.Vegetable.VegetableType;
 
-public class AvatarView extends Activity implements OnTouchListener {
+public class AvatarActivity extends Activity implements OnTouchListener {
 
 	private boolean potatoSelected = false, carrotSelected = false, cabbageSelected = false, eggplantSelected = false;
 	private int picked = 0;
@@ -116,7 +116,7 @@ public class AvatarView extends Activity implements OnTouchListener {
 				finaliseChoices();
 	
 				newGame = true;
-				intent = new Intent(AvatarView.this, GameActivity.class);
+				intent = new Intent(AvatarActivity.this, GameActivity.class);
 				intent.putExtra("GameState", newGame); 
 				intent.putExtra("choice1", choice1); 
 				intent.putExtra("choice2", choice2);
