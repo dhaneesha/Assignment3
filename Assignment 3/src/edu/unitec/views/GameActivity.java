@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import edu.unitec.assignment3.R;
 import edu.unitec.data.Database;
 import edu.unitec.data.Vegetable;
@@ -41,6 +42,9 @@ public class GameActivity extends Activity implements OnTouchListener {
 		gameManager = (GameManager) findViewById(R.id.gameSurfaceView);
 		gameManager.setVeges(veges);
 		gameManager.setOnTouchListener(this);
+		
+		Button btn = (Button) findViewById(R.id.btn_Feed);
+		btn.setOnTouchListener(this);
 	}
 
 	@Override
@@ -59,6 +63,13 @@ public class GameActivity extends Activity implements OnTouchListener {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		
+		id = item.getItemId();
+		if (id == R.id.action_exit) {
+			System.exit(0);
+			return true;
+		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -115,6 +126,11 @@ public class GameActivity extends Activity implements OnTouchListener {
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
+		
+		if (v.getId() == R.id.btn_Feed)
+		{
+			veges.get(0).resizeImage();
+		}
 		
 		Vegetable selectedVege = new Vegetable();	//The vegetable that was selected with the screen touch
 		Intent intent;

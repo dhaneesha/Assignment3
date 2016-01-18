@@ -50,7 +50,8 @@ public class Vegetable {
 	
 	//SIZE
 	private double size;
-	
+	private int growthMultiplierX; // This is a small value initialized during vegetable creation which is used set the image size by multiplying with the current size of vegetable 
+	private int growthMultiplierY;
 	//STATUS
 	private String status;	//defaults to LIVING (two values are LIVING and DEAD)
 	private boolean dead = false;	//not used as at 17.1.16
@@ -67,8 +68,8 @@ public class Vegetable {
 	private Bitmap vegetableImage;
 
 	//location and dimensions of the vegetable
-	private int locationX;
-	private int locationY = 100;
+//	private int locationX = 100;
+//	private int locationY = 100;
 	private int width = 20;
 	private int height = 30;
 	//A rectangle that fits around the vegetable, used for scaling and positioning
@@ -158,7 +159,7 @@ public class Vegetable {
 			 this.thirstRate = 1; 
 			 this.growthRate = 2;
 			 this.personality = Personality.HARDY; 
-			 this.size = 200;
+			 this.size = 20;
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.cabbage);			 
 			 break;
 		
@@ -168,7 +169,7 @@ public class Vegetable {
 			 this.thirstRate = 5;
 			 this.growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
 			 this.personality = Personality.SASSY; 
-			 this.size = 130;
+			 this.size = 13;
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.carrot);
 			 break;
 			
@@ -178,7 +179,7 @@ public class Vegetable {
 			 this.thirstRate = 3;
 			 this.growthRate = 3;
 			 this.personality = Personality.TIMID; 
-			 this.size = 120; 
+			 this.size = 12; 
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.potato);
 			 break;
 		
@@ -188,7 +189,7 @@ public class Vegetable {
 			 this.thirstRate = 2;
 			 this.growthRate = 4;
 			 this.personality = Personality.HARDY; 
-			 this.size = 180;
+			 this.size = 18;
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eggplant);
 			 break;
 
@@ -202,19 +203,27 @@ public class Vegetable {
  		int widthMax = activity.getResources().getDisplayMetrics().widthPixels;
  		int heightMax = activity.getResources().getDisplayMetrics().heightPixels;
  		
+ 		int imageWidth = vegetableImage.getWidth()/2;
+ 		int imageHeight =vegetableImage.getHeight()/2;
+ 		
+ 		growthMultiplierX = vegetableImage.getWidth()/20;
+ 		growthMultiplierY = vegetableImage.getHeight()/20;
+ 		
  		Random r = new Random();
  		int xPosOffset = r.nextInt(widthMax + 1);
- 		if(xPosOffset + vegetableImage.getWidth() >= widthMax)
+ 		if(xPosOffset + imageWidth >= widthMax)
  		{
- 			xPosOffset -= vegetableImage.getWidth();
+ 			xPosOffset -= imageWidth;
  		}
- 		else if (xPosOffset - vegetableImage.getWidth() <= 0)
+ 		else if (xPosOffset - imageWidth <= 0)
  		{
- 			xPosOffset += vegetableImage.getWidth();
+ 			xPosOffset += imageWidth;
  		}
  		
  		//Not sure why the values had to be multiplied at this point
- 		setBoundingRect(new Rect(xPosOffset,heightMax-vegetableImage.getHeight()*3,xPosOffset+vegetableImage.getWidth(), heightMax-vegetableImage.getHeight()*2));
+ 		//setBoundingRect(new Rect(xPosOffset,heightMax-vegetableImage.getHeight()*3,xPosOffset+vegetableImage.getWidth(), heightMax-vegetableImage.getHeight()*2));
+ 		
+ 		setBoundingRect(new Rect(xPosOffset - (imageWidth/2),(heightMax/2) - imageHeight /2,xPosOffset + (imageWidth/2),(heightMax/2) + imageHeight /2)); 	 	
  	}
  	
  	public void drawVegetables(Canvas canvas, ArrayList<Vegetable> veges)
@@ -237,6 +246,7 @@ public class Vegetable {
  		if (!isDead())  // if vegetable is alive 
  		{
  			grow (); // it grows
+ 					 // image resizes by changing the rectangle size
  			calculateMood();
  		}
  	}
@@ -312,6 +322,19 @@ public class Vegetable {
  	}
  	
 	/** 
+	* Increments the size of the Vegetable bitmap rescaling the rectangle
+	* Used for showing vegitable growth
+	*/ 
+ 	public void  resizeImage()
+ 	{
+ 		boundingRect.left -= growthMultiplierX;
+ 		//boundingRect.top -= growthMultiplierY;
+ 		//boundingRect.right += growthMultiplierX;
+ 		boundingRect.bottom += growthMultiplierY;
+ 	}
+ 	
+ 	
+	/** 
 	* I dont understand the purpose of this method to implement it 
 	*/
  	public void move ()
@@ -332,33 +355,6 @@ public class Vegetable {
 	{
 		return vegetableImage;
 	}
- 	
-	/** 
-	* draw the vegetable on a provided canvas at a given position with a given paint object
-	* @param canvas the canvas to be drawn on
-	* @param x coordinate of the canvas
-	* @param y coordinate of the canvas
-	* @param paint object which has all the settings to draw the vegetable
-	* 
-	* Gives an error when tring to rescale when using variables
-	* Probabaly due to threads clashing
-	* Might need to delete this method
-	* Alternative is drawing through GameView
-	*/
- 	public void drawVegetable(Canvas canvas,float x, float y,Paint paint )
- 	{		
- 		
- 	}
- 	
-	/** 
-	* Not in original plan. Just something to check communication and methods
-	*/
- 	public void testingFeed()
- 	{
- 		//testingGrowth++;
- 	}
-
- 	
  	
 	public String getTypeStr() {
 		return typeStr;
@@ -489,21 +485,21 @@ public class Vegetable {
 		this.thirstRate = thirstRate;
 	}
 
-	public int getLocationX() {
-		return locationX;
-	}
-
-	public void setLocationX(int locationX) {
-		this.locationX = locationX;
-	}
-
-	public int getLocationY() {
-		return locationY;
-	}
-
-	public void setLocationY(int locationY) {
-		this.locationY = locationY;
-	}
+//	public int getLocationX() {
+//		return locationX;
+//	}
+//
+//	public void setLocationX(int locationX) {
+//		this.locationX = locationX;
+//	}
+//
+//	public int getLocationY() {
+//		return locationY;
+//	}
+//
+//	public void setLocationY(int locationY) {
+//		this.locationY = locationY;
+//	}
 
 	public Rect getBoundingRect() {
 		return boundingRect;
