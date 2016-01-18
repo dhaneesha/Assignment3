@@ -72,7 +72,7 @@ public class Main extends Activity implements OnClickListener {
 	    {
 	       case R.id.btnGetGrowing:
 	    	   
-	    	   //helper.removeAll(); //Uncomment this to simulate a new game (for testing) - it clears the VEGETABLE table
+	    	   helper.removeAll(); //Uncomment this to simulate a new game (for testing) - it clears the VEGETABLE table
 	    	   
 	    	   //is empty, so let the user pick their vegetables
 	    	   if(helper.isEmpty()) {

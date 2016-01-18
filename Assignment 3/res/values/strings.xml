@@ -16,5 +16,8 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_graveyard">Graveyard</string>
     <string name="title_activity_graveyard_view">GraveyardView</string>
+    <string name="action_exit">Exit</string>
+    <string name="stats_interface">Stats Interface</string>
+    <string name="blank_text"></string>
 
 </resources>

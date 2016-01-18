@@ -19,4 +19,120 @@
         android:layout_centerVertical="true"
         android:background="@drawable/options_box" />
 
+    <ImageView
+        android:id="@+id/mood_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/display_box"
+        android:layout_alignRight="@+id/display_box"
+        android:layout_alignTop="@+id/display_box"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="14dp"
+        android:contentDescription="@string/stats_interface"
+        android:src="@drawable/mood_bar" />
+
+    <ImageView
+        android:id="@+id/hungerLevelBar"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/mood_bar"
+        android:layout_alignLeft="@+id/mood_bar"
+        android:layout_below="@+id/mood_bar"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/stats_bar" />
+
+    <ImageView
+        android:id="@+id/waterLevelBar"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/hungerLevelBar"
+        android:layout_alignLeft="@+id/hungerLevelBar"
+        android:layout_below="@+id/hungerLevelBar"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/stats_bar" />
+
+    <ImageView
+        android:id="@+id/vege_image"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/mood_bar"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toStartOf="@+id/mood_bar"
+        android:layout_toLeftOf="@+id/mood_bar"
+        android:src="@drawable/carrot" />
+
+    <ImageButton
+        android:id="@+id/btn_water"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn_feed"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toEndOf="@+id/btn_feed"
+        android:layout_toRightOf="@+id/btn_feed"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:src="@drawable/btn_water" />
+
+    <ImageButton
+        android:id="@+id/btn_feed"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/display_box"
+        android:layout_alignStart="@+id/vege_image"
+        android:layout_alignLeft="@+id/vege_image"
+        android:layout_marginBottom="14dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:duplicateParentState="true"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:src="@drawable/btn_sun" />
+
+    <TextView
+        android:id="@+id/txt_personality"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_feed"
+        android:layout_toStartOf="@+id/waterLevelBar"
+        android:layout_toLeftOf="@+id/waterLevelBar"
+        android:layout_marginBottom="12dp"
+        android:text="@string/blank_text" />
+
+    <TextView
+        android:id="@+id/txt_age"
+        android:contentDescription="@string/stats_interface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txt_personality"
+        android:layout_alignEnd="@+id/waterLevelBar"
+        android:layout_alignRight="@+id/waterLevelBar"
+        android:text="@string/blank_text" />
+
+    <ImageView
+        android:id="@+id/sun_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/stats_interface"
+        android:minHeight="30dp"
+        android:minWidth="30dp"
+        android:src="@drawable/sun" />
+
+    <ImageView
+        android:id="@+id/water_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/stats_interface"
+        android:minHeight="30dp"
+        android:minWidth="30dp"
+        android:src="@drawable/water_drop" />
+
 </RelativeLayout>

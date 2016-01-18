@@ -30,6 +30,9 @@ public class GameActivity extends Activity implements OnTouchListener {
 	private Vegetable vegeOne, vegeTwo;
 	private ArrayList<Vegetable> veges = new ArrayList<Vegetable>();
 	private GameManager gameManager;
+	private Vegetable selectedVege;	//The vegetable that was selected with the screen touch
+	private Intent intent;
+	private boolean vegeFound = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class GameActivity extends Activity implements OnTouchListener {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		
 		
 		id = item.getItemId();
 		if (id == R.id.action_exit) {
@@ -132,9 +136,7 @@ public class GameActivity extends Activity implements OnTouchListener {
 			veges.get(0).resizeImage();
 		}
 		
-		Vegetable selectedVege = new Vegetable();	//The vegetable that was selected with the screen touch
-		Intent intent;
-		boolean vegeFound = false;
+		vegeFound = false;
 		
 		for(int i = 0; i<veges.size(); i++)
 		{
@@ -152,6 +154,11 @@ public class GameActivity extends Activity implements OnTouchListener {
 			intent.putExtra("waterLevel", selectedVege.getWaterLevel());
 			intent.putExtra("foodLevel", selectedVege.getFoodLevel());
 			intent.putExtra("personality", selectedVege.getPersonality());
+			intent.putExtra("type", selectedVege.getType());
+			
+			//Vegetable vege = new Vegetable();
+			//intent.putExtra("vegetable", vege);
+			
 			//intent.putExtra("size", selectedVege.getSize());
 			//intent.putExtra("mood", selectedVege.getMood());
 	  	  	this.startActivity(intent);

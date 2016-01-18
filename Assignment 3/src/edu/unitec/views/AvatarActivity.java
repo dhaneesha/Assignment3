@@ -76,6 +76,10 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 					potatoSelected = !potatoSelected;
 					if(potatoSelected){
 						picked++;
+						if(picked == 1)
+							choice1 = VegetableType.POTATO;
+						else if(picked == 2)
+							choice2 = VegetableType.POTATO;
 					}
 					else{
 						picked--;
@@ -85,6 +89,10 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 					carrotSelected = !carrotSelected;
 					if(carrotSelected){
 						picked++;
+						if(picked == 1)
+							choice1 = VegetableType.CARROT;
+						else if(picked == 2)
+							choice2 = VegetableType.CARROT;
 					}
 					else{
 						picked--;
@@ -94,6 +102,10 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 					cabbageSelected = !cabbageSelected;
 					if(cabbageSelected){
 						picked++;
+						if(picked == 1)
+							choice1 = VegetableType.CABBAGE;
+						else if(picked == 2)
+							choice2 = VegetableType.CABBAGE;
 					}
 					else{
 						picked--;
@@ -103,6 +115,10 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 					eggplantSelected = !eggplantSelected;
 					if(eggplantSelected){
 						picked++;
+						if(picked == 1)
+							choice1 = VegetableType.EGGPLANT;
+						else if(picked == 2)
+							choice2 = VegetableType.EGGPLANT;
 					}
 					else{
 						picked--;
@@ -111,63 +127,17 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 				}
 			}
 			
-			if(picked == numberOfVeges)
-			{	
-				finaliseChoices();
-	
-				newGame = true;
-				intent = new Intent(AvatarActivity.this, GameActivity.class);
-				intent.putExtra("GameState", newGame); 
-				intent.putExtra("choice1", choice1); 
-				intent.putExtra("choice2", choice2);
-				
-				this.startActivity(intent);
-			}
+		if(picked == numberOfVeges)
+		{	
+			newGame = true;
+			intent = new Intent(AvatarActivity.this, GameActivity.class);
+			intent.putExtra("GameState", newGame); 
+			intent.putExtra("choice1", choice1); 
+			intent.putExtra("choice2", choice2);
 			
-			return false;
+			this.startActivity(intent);
 		}
-	
-	/**
-	 * Some poorly written code to find out which 2 vegetables the user picked - need to refine this
-	 */
-	private void finaliseChoices()
-	{
-		if(potatoSelected)
-		{
-			choice1 = VegetableType.POTATO;
-		}
-		if(carrotSelected)
-		{
-			if(choice1 == VegetableType.NULL)
-			{
-				choice1 = VegetableType.CARROT;
-			}
-			else
-			{
-				choice2 = VegetableType.CARROT;
-			}
-		}
-		if(cabbageSelected)
-		{
-			if(choice1 == VegetableType.NULL)
-			{
-				choice1 = VegetableType.CABBAGE;
-			}
-			else
-			{
-				choice2 = VegetableType.CABBAGE;
-			}
-		}
-		if(eggplantSelected)
-		{
-			if(choice1 == VegetableType.NULL)
-			{
-				choice1 = VegetableType.EGGPLANT;
-			}
-			else
-			{
-				choice2 = VegetableType.EGGPLANT;
-			}
-		}
+		
+		return false;
 	}
 }

@@ -7,6 +7,7 @@
 
 package edu.unitec.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,13 +15,13 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Vegetable {
-	
+@SuppressWarnings("serial")
+public class Vegetable implements Serializable{
+		
 	//Vegetable variables appear in the order that they are entered in the database, for ease of reference
-	
+
 	//ID
 	private int vegeId;	//unique - auto-incremented in database, not initialized here, used for the database update method
 	
@@ -75,7 +76,7 @@ public class Vegetable {
 	//A rectangle that fits around the vegetable, used for scaling and positioning
 	private Rect boundingRect;
 	
-	private Activity activity;
+	private Activity activity;	
 	
 	public Vegetable ()
 	{
