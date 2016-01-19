@@ -15,7 +15,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="edu.unitec.views.Main"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" 
+            android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,26 +26,31 @@
         </activity>
         <activity
             android:name="edu.unitec.views.StatsActivity"
+            android:screenOrientation="landscape" 
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_stats_view"
             android:theme="@style/Theme.Transparent"
             >
         </activity>
         <activity
             android:name="edu.unitec.views.AvatarActivity"
-            android:label="@string/title_activity_avatar_view" >
+            android:label="@string/title_activity_avatar_view"
+            android:screenOrientation="landscape" 
+            android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity
             android:name="edu.unitec.views.GameActivity"
             android:label="@string/title_activity_game"
-            android:parentActivityName="edu.unitec.views.Main" >
+            android:parentActivityName="edu.unitec.views.Main"
+            android:screenOrientation="landscape" 
+            android:configChanges="orientation|keyboardHidden" >
         </activity>
-        <activity
-            android:name="edu.unitec.views.Graveyard"
-            android:label="@string/title_activity_graveyard" >
-        </activity>
+
         <activity
             android:name="edu.unitec.views.GraveyardActivity"
-            android:label="@string/title_activity_graveyard_view" >
+            android:label="@string/title_activity_graveyard_view"
+            android:screenOrientation="landscape" 
+            android:configChanges="orientation|keyboardHidden" >
         </activity>
     </application>
 

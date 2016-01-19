@@ -1,3 +1,4 @@
+
 /**
  * StatsActivity - shows the player the vegetable's stats when they touch it
  * @author 	Lance Donnell and Dhaneesha Rajakaruna
@@ -7,10 +8,7 @@
 
 package edu.unitec.views;
 
-import java.nio.BufferUnderflowException;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,22 +16,18 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import edu.unitec.assignment3.R;
-import edu.unitec.data.Vegetable;
 import edu.unitec.data.Vegetable.Mood;
 import edu.unitec.data.Vegetable.Personality;
 import edu.unitec.data.Vegetable.VegetableType;
 
 public class StatsActivity extends Activity implements OnTouchListener {
 
-	//private TextView displayBox;
-	private Vegetable selectedVege;
 	private View statsView;
-	private int age, waterLevel, foodLevel,feedAmount = 100,waterAmount=100;
+	private int age, waterLevel, foodLevel, feedAmount = 10, waterAmount=10;
 	private Personality personality; 
 	private Mood mood;
 	private VegetableType type;	
@@ -41,29 +35,18 @@ public class StatsActivity extends Activity implements OnTouchListener {
 	private ImageButton btnFeed, btnWater;
 	private TextView txtPersonality, txtAge;
 	private ImageView water, food;
-	private GameManager gameManager;
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stats_view);
-		ImageButton btn = (ImageButton) findViewById(R.id.btn_give_food);
-		btn.setOnTouchListener(this);
-		btn = (ImageButton) findViewById(R.id.btn_water);
-		btn.setOnTouchListener(this);
-		
+			
 		//Retrieve vegetable stats - mood is not implemented in game yet so has to be commented out (17.1.16)
-	
-		age = getIntent().getIntExtra("age", 0);
-		waterLevel = getIntent().getIntExtra("waterLevel",0);
-		foodLevel = getIntent().getIntExtra("foodLevel", 0);
-		personality = (Personality) getIntent().getSerializableExtra("personality");
-		type = (VegetableType) getIntent().getSerializableExtra("type");
-		
-		//Intent i = getIntent();
-		//Vegetable selectedVege = (Vegetable)i.getSerializableExtra("vegetable");
-		
+		age = GameActivity.selectedVege.getCurrentAge();//getIntent().getIntExtra("age", 0);
+		waterLevel = GameActivity.selectedVege.getWaterLevel();//getIntent().getIntExtra("waterLevel",0);
+		foodLevel = GameActivity.selectedVege.getFoodLevel();//getIntent().getIntExtra("foodLevel", 0);
+		personality = GameActivity.selectedVege.getPersonality();//(Personality) getIntent().getSerializableExtra("personality");
+		type = GameActivity.selectedVege.getType();//(VegetableType) getIntent().getSerializableExtra("type");		
 		//mood = (Mood) getIntent().getSerializableExtra("mood");
 	}
 
@@ -87,50 +70,51 @@ public class StatsActivity extends Activity implements OnTouchListener {
 	}
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		
-		if(event.getAction() == MotionEvent.ACTION_DOWN)
-		{
-			switch(v.getId())
-		    {
-		    	case R.id.btn_give_food:
-		    		selectedVege.setFoodLevel(selectedVege.getFoodLevel() + feedAmount);
-		    		Log.d("Testing", "Food Clicked from Stats View");
-		    		break;
-		    	case R.id.btn_water:
-		    		selectedVege.setWaterLevel((selectedVege.getWaterLevel() + waterAmount));
-		    		Log.d("Testing", "Water Clicked from Stats View");
-		    		break;
-		    	case R.id.statsView:
-		    		finish();
-		    		break;
-		    }
-		}  
-		//Set to true because both statsView and display_box were being registered as touched when display_box was touched
-		return true;
-	}
-	
-	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		//Because the size of the screen is not initialised in onCreate, the init() method needs to be called here
 		init();
 	}
+		
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		if(event.getAction() == MotionEvent.ACTION_DOWN)
+		{
+			switch(v.getId())
+		   {
+		   	case R.id.btn_give_food:
+		   		GameActivity.selectedVege.setFoodLevel(GameActivity.selectedVege.getFoodLevel() + feedAmount);
+		   		Log.d("Testing", "Food Clicked from Stats View");
+		   		finish();
+		   		break;
+		   	case R.id.btn_water:
+		   		GameActivity.selectedVege.setWaterLevel((GameActivity.selectedVege.getWaterLevel() + waterAmount));
+		   		Log.d("Testing", "Water Clicked from Stats View");
+		   		finish();
+		   		break;
+		   	case R.id.statsView:
+		   		finish();
+		   		break;
+		   }
+		}  
+		return true;
+	}
 	
 	/**
-	 * Initialises the variables needed for this class and sets OnTouchListeners
-	 * @return void
-	 */
+	* Initialises the variables needed for this class and sets OnTouchListeners
+	* @return void
+	*/
 	private void init()
-	{		
+	{	
 		moodBar = (ImageView) findViewById(R.id.mood_bar);
 		hungerLevelBar= (ImageView) findViewById(R.id.hungerLevelBar);
 		waterLevelBar = (ImageView) findViewById(R.id.waterLevelBar);
 		vegeImage = (ImageView) findViewById(R.id.vege_image);
 		food = (ImageView) findViewById(R.id.sun_icon);
 		water = (ImageView) findViewById(R.id.water_icon);
-		
-		btnFeed = (ImageButton) findViewById(R.id.btn_feed);
+				
+		btnFeed = (ImageButton) findViewById(R.id.btn_give_food);
 		btnWater = (ImageButton) findViewById(R.id.btn_water);
 		
 		txtPersonality = (TextView) findViewById(R.id.txt_personality);
@@ -138,9 +122,6 @@ public class StatsActivity extends Activity implements OnTouchListener {
 		
 		btnFeed.setOnTouchListener(this);
 		btnWater.setOnTouchListener(this);
-				
-		//displayBox = (TextView) findViewById(R.id.display_box);
-		//displayBox.setOnTouchListener(this);
 		
 		statsView = (View) findViewById(R.id.statsView);
 		statsView.setOnTouchListener(this);
@@ -169,9 +150,8 @@ public class StatsActivity extends Activity implements OnTouchListener {
 		
 		water.setX(waterLevelBar.getX()+waterLevelBar.getWidth()/100 * waterLevel);
 		water.setY(waterLevelBar.getY() - water.getHeight()/2);
-		
+	
 		txtPersonality.setText(personality.toString());
-		txtAge.setText(Integer.toString(age));
-		
+		txtAge.setText("Age (M) :" + Integer.toString(age));			
 	}
 }

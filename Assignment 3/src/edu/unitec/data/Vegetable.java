@@ -7,8 +7,9 @@
 
 package edu.unitec.data;
 
-import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import android.app.Activity;
@@ -18,8 +19,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
-@SuppressWarnings("serial")
-public class Vegetable implements Serializable{
+public class Vegetable {
 		
 	//Vegetable variables appear in the order that they are entered in the database, for ease of reference
 
@@ -32,21 +32,25 @@ public class Vegetable implements Serializable{
 	private String typeStr;	//the type of the vegetable as a string, used to convert to an enum upon loading
 	
 	//AGE
+	private Calendar createdDate;
+	private Calendar currentDate; 
 	private int currentAge; 
 	private double finalAge; // unique
+	private double agingRate = 0.1;
 	
 	//WATERLVL, FOODLVL, SHADELVL
 	private int waterLevel; 
 	private int foodLevel;
 	private int shadeLevel;
-	
-	//HUNGERRATE, THIRSTRATE
+	private int maxWaterLevel = 100;
+	private int maxFoodLevel = 100;
+	//HUNGERRATE, THIRSTRATE, GROWTH
 	private double hungerRate; 
 	private double thirstRate; 
 	private double growthRate;	// Higher number mean slower growth
-	
+	private boolean growthHindered =false;
 	//PERSONALITY
-	public enum Personality {SASSY,	HARDY, TIMID}
+	public enum Personality {AGGRESIVE,HARDY,TIMID}
 	private String personalityStr;	//the personality of the vegetable as a string, used when loading the game
 	private Personality personality; 
 	
@@ -58,7 +62,7 @@ public class Vegetable implements Serializable{
 	//STATUS
 	private String status;	//defaults to LIVING (two values are LIVING and DEAD)
 	private boolean dead = false;	//not used as at 17.1.16
-	
+	private boolean eaten=false;
 	//CONDITION
 	private int condition;
 	
@@ -67,7 +71,10 @@ public class Vegetable implements Serializable{
 	//Mood will be defined based on current statistics
 	private Mood mood;
 	
-	private boolean cannibalize = false;
+	//CANNIBAL  
+	private boolean cannibalistic = false;
+	private int canibalPoints = 0;
+	
 	private Bitmap vegetableImage;
 
 	//location and dimensions of the vegetable
@@ -93,7 +100,6 @@ public class Vegetable implements Serializable{
  	{
  		this.activity = activity;
  		this.type = vType;
- 		
  		this.currentAge = 0; 
  		this.waterLevel = 100; 
  		this.foodLevel = 100;
@@ -101,7 +107,7 @@ public class Vegetable implements Serializable{
  		this.mood = Mood.HAPPY;
  		this.status = "LIVING";
  		this.condition = 100;
- 		
+ 		this.createdDate = Calendar.getInstance(); 
  		setVegetableStats();
  		setPosition();
  	}
@@ -134,8 +140,8 @@ public class Vegetable implements Serializable{
  	{
         if(personalityStr.equals("HARDY"))
         	this.personality = Personality.HARDY;
-        if(personalityStr.equals("SASSY"))
-        	this.personality = Personality.SASSY;
+        if(personalityStr.equals("AGGRESIVE"))
+        	this.personality = Personality.AGGRESIVE;
         if(personalityStr.equals("TIMID"))
         	this.personality = Personality.TIMID; 
         
@@ -154,47 +160,47 @@ public class Vegetable implements Serializable{
 	* and the default values for vegetables
 	*/ 	
  	private void setVegetableStats()
- 	{		 		
+ 	{				
  		switch (type) {
 		case CABBAGE:
-			 this.finalAge = 100; 
-			 this.hungerRate = 0.1; 
-			 this.thirstRate = 0.1; 
-			 this.growthRate = 1;
-			 this.personality = Personality.HARDY; 
-			 this.size = 20;
-			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.cabbage);			 
-			 break;
+			this.finalAge = 100; 
+			this.hungerRate = 0.1; 
+			this.thirstRate = 0.1; 
+			this.growthRate = 2;
+			this.personality = Personality.HARDY; 
+			this.size = 10;
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.cabbage);			 
+			break;
 		
 		case CARROT:
-			 this.finalAge = 50; 
-			 this.hungerRate = 0.5; 
-			 this.thirstRate = 0.5;
-			 this.growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
-			 this.personality = Personality.SASSY; 
-			 this.size = 13;
-			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.carrot);
-			 break;
+			this.finalAge = 50; 
+			this.hungerRate = 0.5; 
+			this.thirstRate = 0.5;
+			this.growthRate = 4; // was 3 but for debugging made this a bigger value to easily to see progress 
+			this.personality = Personality.AGGRESIVE; 
+			this.size = 11;
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.carrot);
+			break;
 			
 		case POTATO:
-			 this.finalAge = 60; 
-			 this.hungerRate = 0.4; 
-			 this.thirstRate = 0.3;
-			 this.growthRate = 4;
-			 this.personality = Personality.TIMID; 
-			 this.size = 12; 
-			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.potato);
-			 break;
+			this.finalAge = 60; 
+			this.hungerRate = 0.4; 
+			this.thirstRate = 0.3;
+			this.growthRate = 5;
+			this.personality = Personality.TIMID; 
+			this.size = 6; 
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.potato);
+			break;
 		
 		case EGGPLANT:
-			 this.finalAge = 80; 
-			 this.hungerRate = 0.2; 
-			 this.thirstRate = 0.2;
-			 this.growthRate = 3;
-			 this.personality = Personality.HARDY; 
-			 this.size = 18;
-			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eggplant);
-			 break;
+			this.finalAge = 80; 
+			this.hungerRate = 0.2; 
+			this.thirstRate = 0.2;
+			this.growthRate = 3;
+			this.personality = Personality.HARDY; 
+			this.size = 18;
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eggplant);
+			break;
 
 		case NULL:
 			break;
@@ -226,11 +232,16 @@ public class Vegetable implements Serializable{
  		//Not sure why the values had to be multiplied at this point
  		//setBoundingRect(new Rect(xPosOffset,heightMax-vegetableImage.getHeight()*3,xPosOffset+vegetableImage.getWidth(), heightMax-vegetableImage.getHeight()*2));
  		
- 		setBoundingRect(new Rect(xPosOffset - (imageWidth/2),(heightMax/2) - imageHeight /2,xPosOffset + (imageWidth/2),(heightMax/2) + imageHeight /2)); 	 	
+ 		setBoundingRect(new Rect(xPosOffset - (imageWidth/2),(heightMax/2) - imageHeight /2,xPosOffset + (imageWidth/2),(heightMax/2) + imageHeight /2)); 		
  	}
  	
  	public void drawVegetables(Canvas canvas, ArrayList<Vegetable> veges)
  	{
+ 		if (eaten)
+ 		{
+ 			setEatenVegetables();
+ 		}
+ 		
  		for(int i = 0; i<veges.size(); i++)
  		{
  			canvas.drawBitmap(veges.get(i).getVegetableImage(), null, veges.get(i).getBoundingRect(), null);
@@ -239,18 +250,22 @@ public class Vegetable implements Serializable{
  	
 	/** 
 	* Updates the the vegetable by reducing finalAge, waterLevel,foodLevel, updates mood
+	* Also controls the growth rate based on food and water level
 	*/ 	
  	public void update ()
  	{
- 		this.finalAge -= 0.1;
+ 		this.finalAge -= agingRate;
  		this.foodLevel -= hungerRate;
  		this.waterLevel -= thirstRate;
- 		Log.d("Testing", "Before Alive Code ");
+ 		currentDate = Calendar.getInstance();
+ 		currentAge= currentDate.get(Calendar.MINUTE) - createdDate.get(Calendar.MINUTE);
+ 		
  		if (!isDead())  // if vegetable is alive 
  		{
- 			Log.d("Testing", "Alive Code ");
  			grow (); // it grows image resizes by changing the rectangle size
  			calculateMood();
+ 			checkGrowthRate();
+ 			cannibalPoints();
  		}
  	}
  	
@@ -278,7 +293,8 @@ public class Vegetable implements Serializable{
  		
  		if (foodLevel < 5)
  		{
- 			cannibalize = true;
+ 			setMood(Mood.ANGRY);
+ 			setCannibalistic(true);
  		}
  	}
  	
@@ -294,7 +310,8 @@ public class Vegetable implements Serializable{
  		if (waterLevel <=0	|| foodLevel <=0)
  		{
  			dead = true;
- 			Log.d("Testing", "Dead vegetable");
+ 			//Log.d("Testing", "Dead vegetable");
+ 			finalAge =0; 
  			return true;
  		}		
  		return false;
@@ -317,45 +334,96 @@ public class Vegetable implements Serializable{
  		waterLevel += water;
  	}
  	
-//	/** 
-//	* Increments the size of the Vegetable by adding the food range 
-//	*/ 
-// 	public void grow ()
-// 	{
-// 		size += growthRate;
-// 	}
- 	
 	/** 
 	* Increments the size of the Vegetable bitmap rescaling the rectangle
 	* Used for showing vegitable growth
 	*/ 
  	public void  grow()
  	{
- 		//boundingRect.left -= growthMultiplierX; // debug
- 		//boundingRect.top -= growthMultiplierY;
- 		//boundingRect.right += growthMultiplierX;
- 		//boundingRect.bottom += growthMultiplierY;
-
  		if (growthCounter == (int) growthRate)
  		{
-	 		boundingRect.right += growthMultiplierX;
-	 		boundingRect.bottom += growthMultiplierY;
-	 		growthCounter =1;
+			boundingRect.right += growthMultiplierX;
+			boundingRect.bottom += growthMultiplierY;
+			growthCounter =1;
  		}
  		else
  		{
- 	 		growthCounter++;
- 		}
- 		
+ 			growthCounter++;
+ 		}		
  	}
  	
+	/** 
+	* Checks the current condition of the veges and decides the growth rate
+	*/
+ 	public void checkGrowthRate()
+ 	{		
+		if (waterLevel < maxWaterLevel/2 || foodLevel < maxFoodLevel/2)
+		{
+			growthRate *=2;
+			growthHindered = true;
+		}
+		else if (growthHindered)
+		{
+			growthRate /=2;
+			growthHindered = false;
+		}
+ 	}
  	
 	/** 
-	* I dont understand the purpose of this method to implement it 
+	* This method will calculate the cannibal points which will be based on the vegetables personality and condidion
+	* Depending on the points the system will decide weather to eat a vege or leave it
+	* Also considers current status of the vegetable
 	*/
- 	public void move ()
+ 	public void cannibalPoints()
  	{
+ 		setCanibalPoints(0);
+ 		switch (personality) {
+		case AGGRESIVE:
+			setCanibalPoints(getCanibalPoints() + 50); // 
+			break;			
+		
+		case HARDY:
+			setCanibalPoints(getCanibalPoints() + 40); // 
+			break;	
+			
+		case TIMID:
+			setCanibalPoints(getCanibalPoints() + 10);
+			break;
+
+		default:
+			break;
+		}
  		
+ 		setCanibalPoints(getCanibalPoints() + foodLevel+waterLevel); 		
+ 	}
+ 	
+	/** 
+	* Changes the images of the eaten veges
+	*/
+ 	public void setEatenVegetables()
+ 	{
+ 		switch (type) {
+		case CARROT:
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eaten_carrot);
+			break;			
+		
+		case POTATO:
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eaten_potato);
+			break;	
+			
+		case CABBAGE:
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eaten_cabbage);
+			break;
+
+		case EGGPLANT:
+			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eaten_eggplant);
+			break;
+			
+		default:
+			break;
+		}
+ 		
+ 		setCanibalPoints(getCanibalPoints() + foodLevel+waterLevel); 		
  	}
  	
 	/** 
@@ -507,5 +575,29 @@ public class Vegetable implements Serializable{
 
 	public void setBoundingRect(Rect boundingRect) {
 		this.boundingRect = boundingRect;
+	}
+
+	public boolean isCannibalistic() {
+		return cannibalistic;
+	}
+
+	public void setCannibalistic(boolean cannibalistic) {
+		this.cannibalistic = cannibalistic;
+	}
+
+	public int getCanibalPoints() {
+		return canibalPoints;
+	}
+
+	public void setCanibalPoints(int canibalPoints) {
+		this.canibalPoints = canibalPoints;
+	}
+	
+	public void setEaten(boolean eaten) {
+		this.eaten = eaten;
+	}
+
+	public void setDead(boolean dead) {
+		this.dead = dead;
 	}
 }

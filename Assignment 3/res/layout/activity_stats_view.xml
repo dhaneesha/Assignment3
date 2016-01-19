@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     android:focusableInTouchMode="true"
     tools:context="edu.unitec.views.StatsActivity" >
 
@@ -66,57 +65,6 @@
         android:layout_toLeftOf="@+id/mood_bar"
         android:src="@drawable/carrot" />
 
-    <ImageButton
-        android:id="@+id/btn_water"
-        android:contentDescription="@string/stats_interface"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btn_feed"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_toEndOf="@+id/btn_feed"
-        android:layout_toRightOf="@+id/btn_feed"
-        android:minHeight="48dp"
-        android:minWidth="48dp"
-        android:src="@drawable/btn_water" />
-
-    <ImageButton
-        android:id="@+id/btn_give_food"
-        android:contentDescription="@string/stats_interface"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/display_box"
-        android:layout_alignStart="@+id/vege_image"
-        android:layout_alignLeft="@+id/vege_image"
-        android:layout_marginBottom="14dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:duplicateParentState="true"
-        android:minHeight="48dp"
-        android:minWidth="48dp"
-        android:src="@drawable/btn_sun" />
-
-    <TextView
-        android:id="@+id/txt_personality"
-        android:contentDescription="@string/stats_interface"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_feed"
-        android:layout_toStartOf="@+id/waterLevelBar"
-        android:layout_toLeftOf="@+id/waterLevelBar"
-        android:layout_marginBottom="12dp"
-        android:text="@string/blank_text" />
-
-    <TextView
-        android:id="@+id/txt_age"
-        android:contentDescription="@string/stats_interface"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txt_personality"
-        android:layout_alignEnd="@+id/waterLevelBar"
-        android:layout_alignRight="@+id/waterLevelBar"
-        android:text="@string/blank_text" />
-
     <ImageView
         android:id="@+id/sun_icon"
         android:layout_width="wrap_content"
@@ -134,5 +82,54 @@
         android:minHeight="30dp"
         android:minWidth="30dp"
         android:src="@drawable/water_drop" />
+
+    <ImageButton
+        android:id="@+id/btn_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/display_box"
+        android:layout_alignRight="@+id/waterLevelBar"
+        android:layout_marginBottom="18dp"
+        android:contentDescription="@string/stats_interface"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:src="@drawable/btn_water" />
+
+    <ImageButton
+        android:id="@+id/btn_give_food"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn_water"
+        android:layout_toLeftOf="@+id/waterLevelBar"
+        android:contentDescription="@string/stats_interface"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:src="@drawable/btn_sun" />
+    
+    <TextView
+        android:id="@+id/txt_personality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/vege_image"
+        android:layout_alignLeft="@+id/vege_image"
+        android:layout_below="@+id/waterLevelBar"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:contentDescription="@string/stats_interface"
+        android:text="@string/blank_text" />
+
+    <TextView
+        android:id="@+id/txt_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txt_personality"
+        android:layout_alignBottom="@+id/txt_personality"
+        android:layout_alignEnd="@+id/waterLevelBar"
+        android:layout_alignRight="@+id/waterLevelBar"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:contentDescription="@string/stats_interface"
+        android:text="@string/blank_text" />
 
 </RelativeLayout>

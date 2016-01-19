@@ -34,7 +34,7 @@ public class GameActivity extends Activity implements OnTouchListener {
 	private Intent intent;
 	private boolean vegeFound = false;
 	private CountDownTimer countdown;
-	Vegetable selectedVege;	//The vegetable that was selected with the screen touch
+	static Vegetable selectedVege;	//The vegetable that was selected with the screen touch
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +48,22 @@ public class GameActivity extends Activity implements OnTouchListener {
 		gameManager.setVeges(veges);
 		gameManager.setOnTouchListener(this);
 		
-		Button btn = (Button) findViewById(R.id.btn_Feed);
-		btn.setOnTouchListener(this);
-		
 		countdown = new CountDownTimer(1000, 1000) {
 
-		     public void onTick(long millisUntilFinished) {
-		        //Log.d("Tic","seconds remaining: " + millisUntilFinished / 1000);
-		     }
+		    public void onTick(long millisUntilFinished) {
+		       //Log.d("Tic","seconds remaining: " + millisUntilFinished / 1000);
+		    }
 
-		     public void onFinish() {
-		    	 //Code to update
-		    	 veges.get(0).update ();
-				 veges.get(1).update ();
-		    	 this.start();
-		     }
-		  }.start();
+		    public void onFinish() {
+		   	//Code to update
+		   	 
+		   	for(Vegetable vege : veges)
+		   	{
+		   		vege.update();
+		   	}
+		   	this.start();
+		    }
+		 }.start();
 
 	}
 
@@ -95,8 +95,8 @@ public class GameActivity extends Activity implements OnTouchListener {
 	}
 	
 	/**
-	 * Initialize the game by either creating or loading in the player's Vegetables
-	 */
+	* Initialize the game by either creating or loading in the player's Vegetables
+	*/
 	private void init()
 	{
 		//both intents (from Main and AvatarSelection) that get you here send a newGameState value
@@ -104,62 +104,20 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
 		//if it is a new game, create new vegetables based on player's choice
 		if(newGameState){
-			VegetableType choice1 = (VegetableType) getIntent().getSerializableExtra("choice1");
-			VegetableType choice2 = (VegetableType) getIntent().getSerializableExtra("choice2");
-			
-			vegeOne = new Vegetable(this, choice1);
-			vegeTwo = new Vegetable(this, choice2);
-						
-			//Add the new veges to the database
-			long first = helper.insert(choice1.toString(), vegeOne.getCurrentAge(), vegeOne.getWaterLevel(), vegeOne.getFoodLevel(), vegeOne.getShadeLevel(), vegeOne.getThirstRate(), vegeOne.getHungerRate(), vegeOne.getPersonality().toString(), vegeOne.getSize(), vegeOne.getStatus(), vegeOne.getCondition());
-			long second = helper.insert(choice2.toString(), vegeTwo.getCurrentAge(), vegeTwo.getWaterLevel(), vegeTwo.getFoodLevel(), vegeTwo.getShadeLevel(), vegeTwo.getThirstRate(), vegeTwo.getHungerRate(), vegeTwo.getPersonality().toString(), vegeTwo.getSize(), vegeTwo.getStatus(), vegeTwo.getCondition());
-			
-			if(first < 0)
-			{
-				Log.e("ERROR", "First went wrong.");
-			}
-			if(second < 0)
-			{
-				Log.e("ERROR", "Second went wrong.");
-			}
-			
-			//Add the veges to the arraylist
-			veges.add(vegeOne); 
-			veges.add(vegeTwo);
+			startNewGame();
 		
 		//if it is not a new game, load in all living vegetables and create objects for them
-		}else{
-			
-			String living = helper.getLiving();
-			String[] livingVeges = living.split("#");
-			
-            for (int i = 0; i<livingVeges.length; i++)
-            {
-                if (livingVeges[i] != ""){
-                    veges.add(new Vegetable(livingVeges[i], this));
-                }
-            }			
+		}else{			
+			loadGame();	
 		}
 		
 		helper.close();
 	}
 
-	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		
-		// Debug buttons 	
-		if (v.getId() == R.id.btn_Feed &&  event.getAction() == MotionEvent.ACTION_DOWN)
-		{
-			
-		}
-		
-		if (v.getId() == R.id.btn_Testing)
-		{
-			countdown.cancel();
-		}
-		
-		// Debug buttons end
+	
+		//countdown.cancel();
 		
 		vegeFound = false;
 		
@@ -174,19 +132,56 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
 		if(vegeFound)
 		{
-			intent = new Intent(GameActivity.this, StatsActivity.class);
-			intent.putExtra("age", selectedVege.getCurrentAge());
-			intent.putExtra("waterLevel", selectedVege.getWaterLevel());
-			intent.putExtra("foodLevel", selectedVege.getFoodLevel());
-			intent.putExtra("personality", selectedVege.getPersonality());
-			intent.putExtra("type", selectedVege.getType());
-			
-			//intent.putExtra("size", selectedVege.getSize());
-			//intent.putExtra("mood", selectedVege.getMood());
-	  	  	this.startActivity(intent);
+			intent = new Intent(GameActivity.this, StatsActivity.class);			
+	 	 	this.startActivity(intent);
 		}
 
 		return false;
+	}
+	
+	/**
+	* Initialize a new game
+	*/
+	private void startNewGame()
+	{
+		VegetableType choice1 = (VegetableType) getIntent().getSerializableExtra("choice1");
+		VegetableType choice2 = (VegetableType) getIntent().getSerializableExtra("choice2");
+		
+		vegeOne = new Vegetable(this, choice1);
+		vegeTwo = new Vegetable(this, choice2);
+					
+		//Add the new veges to the database
+		long first = helper.insert(choice1.toString(), vegeOne.getCurrentAge(), vegeOne.getWaterLevel(), vegeOne.getFoodLevel(), vegeOne.getShadeLevel(), vegeOne.getThirstRate(), vegeOne.getHungerRate(), vegeOne.getPersonality().toString(), vegeOne.getSize(), vegeOne.getStatus(), vegeOne.getCondition());
+		long second = helper.insert(choice2.toString(), vegeTwo.getCurrentAge(), vegeTwo.getWaterLevel(), vegeTwo.getFoodLevel(), vegeTwo.getShadeLevel(), vegeTwo.getThirstRate(), vegeTwo.getHungerRate(), vegeTwo.getPersonality().toString(), vegeTwo.getSize(), vegeTwo.getStatus(), vegeTwo.getCondition());
+		
+		if(first < 0)
+		{
+			Log.e("ERROR", "First went wrong.");
+		}
+		if(second < 0)
+		{
+			Log.e("ERROR", "Second went wrong.");
+		}
+		
+		//Add the veges to the arraylist
+		veges.add(vegeOne); 
+		veges.add(vegeTwo);
+	}
+	
+	/**
+	* retrieve stats of existing vegetables from the database
+	*/
+	private void loadGame()
+	{
+		String living = helper.getLiving();
+		String[] livingVeges = living.split("#");
+		
+        for (int i = 0; i<livingVeges.length; i++)
+        {
+            if (livingVeges[i] != ""){
+                veges.add(new Vegetable(livingVeges[i], this));
+            }
+        }		
 	}
 	
 }

@@ -10,12 +10,9 @@ package edu.unitec.views;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -33,11 +30,10 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	private Paint paint;	
 	private Boolean running = false;	
 	private ArrayList<Vegetable> veges = new ArrayList<Vegetable>();	//all the vegetables currently drawn on screen
-	
 	/** 
-	 * Class constructor.
-	 * @param context Context of the application
-	 */				
+	* Class constructor.
+	* @param context Context of the application
+	*/				
 	public GameManager(Context context) // Constructor
 	{		
 		super(context);
@@ -45,9 +41,9 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	}
 	
 	/**
-	 * Class alternate constructor.
-	 * @param context Context of the application
-	 * @param attrs attributeset
+	* Class alternate constructor.
+	* @param context Context of the application
+	* @param attrs attributeset
 	*/
 	
 	public GameManager(Context context, AttributeSet attrs) { // Alternate Constructor
@@ -111,6 +107,10 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 			{	
 				canvas = holder.lockCanvas();
 				
+				if (veges.get(0).isCannibalistic() || veges.get(1).isCannibalistic() )
+				{
+					
+				}
 				//Canvas becomes null whenever you rotate the view, so this check has been added to ensure it isn't before attempting to draw
 				if(canvas != null)
 				{
@@ -120,10 +120,10 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 					paint.setColor(Color.WHITE);
 					canvas.drawText("Vege 1 Water :" + veges.get(0).getWaterLevel(), 10, 50, paint);
 					canvas.drawText("Vege 1 Food :" +  veges.get(0).getFoodLevel(),300, 50, paint);
-					canvas.drawText("Vege 1 Life :" +  veges.get(0).getFinalAge(),600, 50, paint);
+					canvas.drawText("Vege 1 Life :" + (int) veges.get(0).getFinalAge(),600, 50, paint);
 					canvas.drawText("Vege 2 Water : " +  veges.get(1).getWaterLevel(), 10, 100, paint);
 					canvas.drawText("Vege 2 Food : " +  veges.get(1).getFoodLevel(), 300, 100, paint);
-					canvas.drawText("Vege 2 Life :" +  veges.get(1).getFinalAge(),600, 100, paint);
+					canvas.drawText("Vege 2 Life :" + (int) veges.get(1).getFinalAge(),600, 100, paint);
 					//debug stats ends
 					
 					for(int i = 0; i<veges.size(); i++)
@@ -148,11 +148,29 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	}
 	
 	/**
-	 * bit of a hacky solution to passing information between the GameActivity and GameManager view
-	 * @param veges		Contains the vegetables we want to draw (initialised in GameActivity)
-	 */
+	* Passes the vegetables Arraylist from the GameActivity to the GameManager
+	* @param veges		Contains the vegetables we want to draw (initialised in GameActivity)
+	*/
 	public void setVeges(ArrayList<Vegetable> veges)
 	{
 		this.veges = veges;
+	}
+	
+	
+	/**
+	* Decides which vegetable will be eaten by checking points
+	*/
+	public void eatUp()
+	{
+		if (veges.get(0).getCanibalPoints() > veges.get(1).getCanibalPoints())
+		{
+			veges.get(1).setEaten(true);
+			veges.get(1).setDead(true);
+		}
+		else
+		{
+			veges.get(0).setEaten(true);
+			veges.get(0).setDead(true);
+		}
 	}
 }
