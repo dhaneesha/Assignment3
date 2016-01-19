@@ -1,5 +1,5 @@
 /**
- * Our opening menu
+ * Our opening menu, players can select to get growing or visit the graveyard
  * @author 	Lance Donnell and Dhaneesha Rajakaruna
  * @version 1.0
  * @since 	2016-01-13
@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import edu.unitec.assignment3.R;
@@ -29,6 +30,7 @@ public class Main extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
     	
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
         
         helper = new Database(this); //haven't added any code to insert data into the database because it should be empty to begin with.
@@ -44,25 +46,6 @@ public class Main extends Activity implements OnClickListener {
     {
     	super.onDestroy();
     	helper.close();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 	@Override

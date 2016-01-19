@@ -10,12 +10,10 @@ package edu.unitec.views;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +37,7 @@ public class StatsActivity extends Activity implements OnTouchListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_stats_view);
 			
 		//Retrieve vegetable stats - mood is not implemented in game yet so has to be commented out (17.1.16)
@@ -48,25 +47,6 @@ public class StatsActivity extends Activity implements OnTouchListener {
 		personality = GameActivity.selectedVege.getPersonality();//(Personality) getIntent().getSerializableExtra("personality");
 		type = GameActivity.selectedVege.getType();//(VegetableType) getIntent().getSerializableExtra("type");		
 		//mood = (Mood) getIntent().getSerializableExtra("mood");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.stats_view, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -84,13 +64,11 @@ public class StatsActivity extends Activity implements OnTouchListener {
 			switch(v.getId())
 		   {
 		   	case R.id.btn_give_food:
-		   		GameActivity.selectedVege.setFoodLevel(GameActivity.selectedVege.getFoodLevel() + feedAmount);
-		   		Log.d("Testing", "Food Clicked from Stats View");
+		   		GameActivity.selectedVege.feed(feedAmount);
 		   		finish();
 		   		break;
 		   	case R.id.btn_water:
-		   		GameActivity.selectedVege.setWaterLevel((GameActivity.selectedVege.getWaterLevel() + waterAmount));
-		   		Log.d("Testing", "Water Clicked from Stats View");
+		   		GameActivity.selectedVege.irrigate(waterAmount);
 		   		finish();
 		   		break;
 		   	case R.id.statsView:

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import edu.unitec.assignment3.R;
@@ -32,6 +33,7 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_avatar_view);
 		
 		btnPotato = (ImageView) findViewById(R.id.btn_potato);
@@ -125,19 +127,19 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 					}
 					break;
 				}
-			}
 			
-		if(picked == numberOfVeges)
-		{	
-			newGame = true;
-			intent = new Intent(AvatarActivity.this, GameActivity.class);
-			intent.putExtra("GameState", newGame); 
-			intent.putExtra("choice1", choice1); 
-			intent.putExtra("choice2", choice2);
-			
-			this.startActivity(intent);
+			if(picked == numberOfVeges)
+			{	
+				newGame = true;
+				intent = new Intent(AvatarActivity.this, GameActivity.class);
+				intent.putExtra("GameState", newGame); 
+				intent.putExtra("choice1", choice1); 
+				intent.putExtra("choice2", choice2);
+				
+				this.startActivity(intent);
+			}			
 		}
-		
+
 		return false;
 	}
 }

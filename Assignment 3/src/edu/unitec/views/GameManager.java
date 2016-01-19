@@ -1,5 +1,5 @@
 /**
- * Game loop
+ * Game loop is in charge of regulating and drawing the game
  * @author 	Lance Donnell and Dhaneesha Rajakaruna
  * @version 1.0
  * @since 	2016-01-16
@@ -11,14 +11,15 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import edu.unitec.data.Habitat;
 import edu.unitec.data.Vegetable;
 
 public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.Callback {
@@ -30,6 +31,9 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	private Paint paint;	
 	private Boolean running = false;	
 	private ArrayList<Vegetable> veges = new ArrayList<Vegetable>();	//all the vegetables currently drawn on screen
+	private Habitat hab;
+	private CountDownTimer countdown;
+
 	/** 
 	* Class constructor.
 	* @param context Context of the application
@@ -49,6 +53,7 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	public GameManager(Context context, AttributeSet attrs) { // Alternate Constructor
 		super(context, attrs);
 		getHolder().addCallback(this);
+		hab = new Habitat(context);
 	}
 	
 	public void surfaceCreated	(SurfaceHolder	holder) {	
@@ -71,7 +76,21 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 			Log.d("Error", "Error in surfaceCreated" + ex.getMessage());
 		}
 		//screenWidth = holder.getSurfaceFrame().right ; // gets the size of the surface frame to store in the model
-		//screenHeight = holder.getSurfaceFrame().bottom ;	
+		//screenHeight = holder.getSurfaceFrame().bottom ;
+
+		//Waits a minute before checking to see if the weather has changed
+		countdown = new CountDownTimer(1000*60, 1000) {
+
+		     public void onTick(long millisUntilFinished) {
+		     }
+
+		     public void onFinish() {
+		    	 //Code to update    	 
+		    	 hab.updateWeather();
+		    	 this.start();
+		     }
+
+		}.start();	
 		
 	}
 	
@@ -111,21 +130,12 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 				{
 					
 				}
+				
 				//Canvas becomes null whenever you rotate the view, so this check has been added to ensure it isn't before attempting to draw
 				if(canvas != null)
-				{
-					canvas.drawColor(Color.BLACK);
-					
-					//debug stats
-					paint.setColor(Color.WHITE);
-					canvas.drawText("Vege 1 Water :" + veges.get(0).getWaterLevel(), 10, 50, paint);
-					canvas.drawText("Vege 1 Food :" +  veges.get(0).getFoodLevel(),300, 50, paint);
-					canvas.drawText("Vege 1 Life :" + (int) veges.get(0).getFinalAge(),600, 50, paint);
-					canvas.drawText("Vege 2 Water : " +  veges.get(1).getWaterLevel(), 10, 100, paint);
-					canvas.drawText("Vege 2 Food : " +  veges.get(1).getFoodLevel(), 300, 100, paint);
-					canvas.drawText("Vege 2 Life :" + (int) veges.get(1).getFinalAge(),600, 100, paint);
-					//debug stats ends
-					
+				{	
+					hab.drawBackground(canvas);
+									
 					for(int i = 0; i<veges.size(); i++)
 					{
 						veges.get(i).drawVegetables(canvas, veges);	//need to implement this better so it's not a static method		
@@ -154,6 +164,16 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	public void setVeges(ArrayList<Vegetable> veges)
 	{
 		this.veges = veges;
+	}
+
+
+	/**
+	 * Passes the veges to the GameActivity for saving the game progress
+	 * @return ArrayList<Vegetable>		the array of currently living veges that need to be updated
+	 */
+	public ArrayList<Vegetable> getVeges()
+	{
+		return veges;
 	}
 	
 	

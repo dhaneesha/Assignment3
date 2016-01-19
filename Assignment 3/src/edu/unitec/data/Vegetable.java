@@ -7,7 +7,6 @@
 
 package edu.unitec.data;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -17,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 public class Vegetable {
 		
@@ -44,11 +42,13 @@ public class Vegetable {
 	private int shadeLevel;
 	private int maxWaterLevel = 100;
 	private int maxFoodLevel = 100;
+
 	//HUNGERRATE, THIRSTRATE, GROWTH
 	private double hungerRate; 
 	private double thirstRate; 
 	private double growthRate;	// Higher number mean slower growth
 	private boolean growthHindered =false;
+
 	//PERSONALITY
 	public enum Personality {AGGRESIVE,HARDY,TIMID}
 	private String personalityStr;	//the personality of the vegetable as a string, used when loading the game
@@ -59,10 +59,12 @@ public class Vegetable {
 	private int growthMultiplierX; // This is a small value initialized during vegetable creation which is used set the image size by multiplying with the current size of vegetable 
 	private int growthMultiplierY;
 	private int growthCounter=1;
+
 	//STATUS
 	private String status;	//defaults to LIVING (two values are LIVING and DEAD)
 	private boolean dead = false;	//not used as at 17.1.16
 	private boolean eaten=false;
+
 	//CONDITION
 	private int condition;
 	
@@ -77,11 +79,6 @@ public class Vegetable {
 	
 	private Bitmap vegetableImage;
 
-	//location and dimensions of the vegetable
-//	private int locationX = 100;
-//	private int locationY = 100;
-	private int width = 20;
-	private int height = 30;
 	//A rectangle that fits around the vegetable, used for scaling and positioning
 	private Rect boundingRect;
 	
@@ -207,6 +204,11 @@ public class Vegetable {
 		}
  	}
  	
+ 	/**
+ 	 * retrieves the size of the screen and creates the bounding rectangle around the vegetable from those values
+ 	 * Randomly selects the vegetable's starting position on the x axis
+ 	 * @return void 
+ 	 */
  	public void setPosition()
  	{
  		int widthMax = activity.getResources().getDisplayMetrics().widthPixels;
@@ -235,6 +237,11 @@ public class Vegetable {
  		setBoundingRect(new Rect(xPosOffset - (imageWidth/2),(heightMax/2) - imageHeight /2,xPosOffset + (imageWidth/2),(heightMax/2) + imageHeight /2)); 		
  	}
  	
+ 	/**
+ 	 * Takes an ArrayList of vegetables and draws them to the provided canvas as well as checking if the vegetable has been eaten
+ 	 * @param canvas		the canvas the vegetable should be drawn on
+ 	 * @param veges			the vegetables to be drawn
+ 	 */
  	public void drawVegetables(Canvas canvas, ArrayList<Vegetable> veges)
  	{
  		if (eaten)
@@ -322,7 +329,8 @@ public class Vegetable {
 	*/ 
  	public void feed (int food)
  	{
- 		foodLevel += food;
+ 		if(foodLevel + food <= maxFoodLevel)
+ 			this.foodLevel += food;
  	}
  	
 	/** 
@@ -331,7 +339,8 @@ public class Vegetable {
 	*/ 
  	public void irrigate (int water)
  	{
- 		waterLevel += water;
+ 		if(waterLevel + water <= maxWaterLevel)
+ 			this.waterLevel += water;
  	}
  	
 	/** 

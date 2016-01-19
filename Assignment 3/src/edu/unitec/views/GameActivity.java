@@ -14,12 +14,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
+import android.view.Window;
 import edu.unitec.assignment3.R;
 import edu.unitec.data.Database;
 import edu.unitec.data.Vegetable;
@@ -39,6 +37,7 @@ public class GameActivity extends Activity implements OnTouchListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_game);
 
 		helper = new Database(this);	
@@ -68,32 +67,20 @@ public class GameActivity extends Activity implements OnTouchListener {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.game, menu);
-		return true;
+	public void onPause() {
+	    super.onPause(); 
+	    
+	    Database helper = new Database(this);
+	    veges = gameManager.getVeges();
+	    
+	    //Save the game data
+	    for(Vegetable vege : veges)
+	    {
+	    	helper.update(vege.getVegeId(), vege.getType().toString(), vege.getCurrentAge(), vege.getWaterLevel(), vege.getFoodLevel(), vege.getShadeLevel(), vege.getThirstRate(), vege.getHungerRate(), vege.getPersonality().toString(), vege.getSize(), vege.getStatus(), vege.getCondition());
+	    }
+	    helper.close();
 	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
 		
-		
-		id = item.getItemId();
-		if (id == R.id.action_exit) {
-			System.exit(0);
-			return true;
-		}
-		
-		return super.onOptionsItemSelected(item);
-	}
-	
 	/**
 	* Initialize the game by either creating or loading in the player's Vegetables
 	*/
@@ -123,7 +110,8 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
 		for(int i = 0; i<veges.size(); i++)
 		{
-			//found it easiest to use this already established rect method (contains)
+			//found it easiest to use this already established rect method (contains) - checks if the player 
+			//touched the screen within the bounds of the vegetable
 			if(veges.get(i).getBoundingRect().contains((int)event.getX(), (int)event.getY())){
 				selectedVege = veges.get(i);
 				vegeFound = true;
