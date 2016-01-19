@@ -7,14 +7,18 @@
 
 package edu.unitec.views;
 
+import java.nio.BufferUnderflowException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,23 +33,28 @@ public class StatsActivity extends Activity implements OnTouchListener {
 	//private TextView displayBox;
 	private Vegetable selectedVege;
 	private View statsView;
-	private int age, waterLevel, foodLevel;
+	private int age, waterLevel, foodLevel,feedAmount = 100,waterAmount=100;
 	private Personality personality; 
 	private Mood mood;
-	private VegetableType type;
-	
+	private VegetableType type;	
 	private ImageView moodBar, hungerLevelBar, waterLevelBar, vegeImage;
 	private ImageButton btnFeed, btnWater;
 	private TextView txtPersonality, txtAge;
-	
 	private ImageView water, food;
-		
+	private GameManager gameManager;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stats_view);
-			
+		ImageButton btn = (ImageButton) findViewById(R.id.btn_give_food);
+		btn.setOnTouchListener(this);
+		btn = (ImageButton) findViewById(R.id.btn_water);
+		btn.setOnTouchListener(this);
+		
 		//Retrieve vegetable stats - mood is not implemented in game yet so has to be commented out (17.1.16)
+	
 		age = getIntent().getIntExtra("age", 0);
 		waterLevel = getIntent().getIntExtra("waterLevel",0);
 		foodLevel = getIntent().getIntExtra("foodLevel", 0);
@@ -84,11 +93,13 @@ public class StatsActivity extends Activity implements OnTouchListener {
 		{
 			switch(v.getId())
 		    {
-		    	case R.id.btn_Feed:
-		    		
+		    	case R.id.btn_give_food:
+		    		selectedVege.setFoodLevel(selectedVege.getFoodLevel() + feedAmount);
+		    		Log.d("Testing", "Food Clicked from Stats View");
 		    		break;
 		    	case R.id.btn_water:
-		    		
+		    		selectedVege.setWaterLevel((selectedVege.getWaterLevel() + waterAmount));
+		    		Log.d("Testing", "Water Clicked from Stats View");
 		    		break;
 		    	case R.id.statsView:
 		    		finish();

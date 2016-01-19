@@ -24,8 +24,9 @@
         </activity>
         <activity
             android:name="edu.unitec.views.StatsActivity"
+            android:label="@string/title_activity_stats_view"
             android:theme="@style/Theme.Transparent"
-            android:label="@string/title_activity_stats_view" >
+            >
         </activity>
         <activity
             android:name="edu.unitec.views.AvatarActivity"

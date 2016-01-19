@@ -81,7 +81,7 @@
         android:src="@drawable/btn_water" />
 
     <ImageButton
-        android:id="@+id/btn_feed"
+        android:id="@+id/btn_give_food"
         android:contentDescription="@string/stats_interface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

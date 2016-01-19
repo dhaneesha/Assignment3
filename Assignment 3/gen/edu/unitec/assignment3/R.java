@@ -56,10 +56,10 @@ public final class R {
         public static final int water_drop=0x7f02000d;
     }
     public static final class id {
-        public static final int action_exit=0x7f0a001c;
-        public static final int action_settings=0x7f0a001b;
-        public static final int btnGetGrowing=0x7f0a0018;
-        public static final int btnGraveyard=0x7f0a0019;
+        public static final int action_exit=0x7f0a001d;
+        public static final int action_settings=0x7f0a001c;
+        public static final int btnGetGrowing=0x7f0a0019;
+        public static final int btnGraveyard=0x7f0a001a;
         public static final int btn_Feed=0x7f0a0006;
         public static final int btn_Irrigate=0x7f0a0007;
         public static final int btn_Testing=0x7f0a0009;
@@ -68,23 +68,24 @@ public final class R {
         public static final int btn_carrot=0x7f0a0001;
         public static final int btn_eggplant=0x7f0a0004;
         public static final int btn_feed=0x7f0a0011;
+        public static final int btn_give_food=0x7f0a0012;
         public static final int btn_potato=0x7f0a0002;
-        public static final int btn_pumpkin=0x7f0a0016;
-        public static final int btn_squash=0x7f0a0017;
+        public static final int btn_pumpkin=0x7f0a0017;
+        public static final int btn_squash=0x7f0a0018;
         public static final int btn_water=0x7f0a0010;
         public static final int display_box=0x7f0a000b;
         public static final int gameSurfaceView=0x7f0a0005;
         public static final int hungerLevelBar=0x7f0a000d;
         public static final int mood_bar=0x7f0a000c;
         public static final int statsView=0x7f0a000a;
-        public static final int sun_icon=0x7f0a0014;
-        public static final int txtTitle=0x7f0a001a;
+        public static final int sun_icon=0x7f0a0015;
+        public static final int txtTitle=0x7f0a001b;
         public static final int txtViewWelcome=0x7f0a0000;
-        public static final int txt_age=0x7f0a0013;
-        public static final int txt_personality=0x7f0a0012;
+        public static final int txt_age=0x7f0a0014;
+        public static final int txt_personality=0x7f0a0013;
         public static final int vege_image=0x7f0a000f;
         public static final int waterLevelBar=0x7f0a000e;
-        public static final int water_icon=0x7f0a0015;
+        public static final int water_icon=0x7f0a0016;
     }
     public static final class layout {
         public static final int activity_avatar_view=0x7f030000;

@@ -16,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,11 +30,10 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 	private SurfaceHolder holder;
 	public Handler mHandler;
 	private Canvas canvas;
-	//private Paint paint;	
-	private Boolean running = false;
-	
+	private Paint paint;	
+	private Boolean running = false;	
 	private ArrayList<Vegetable> veges = new ArrayList<Vegetable>();	//all the vegetables currently drawn on screen
-
+	
 	/** 
 	 * Class constructor.
 	 * @param context Context of the application
@@ -65,8 +65,10 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 		{	
 			//initialize startup the variables 
 			canvas = new Canvas();
-			//paint = new Paint ();
 			
+			paint = new Paint (); // debug code
+			paint.setTextSize(36);
+			paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 		}
 		catch(Exception ex)
 		{
@@ -112,8 +114,18 @@ public class GameManager extends SurfaceView implements Runnable, SurfaceHolder.
 				//Canvas becomes null whenever you rotate the view, so this check has been added to ensure it isn't before attempting to draw
 				if(canvas != null)
 				{
-					//paint.setColor(Color.RED);	
 					canvas.drawColor(Color.BLACK);
+					
+					//debug stats
+					paint.setColor(Color.WHITE);
+					canvas.drawText("Vege 1 Water :" + veges.get(0).getWaterLevel(), 10, 50, paint);
+					canvas.drawText("Vege 1 Food :" +  veges.get(0).getFoodLevel(),300, 50, paint);
+					canvas.drawText("Vege 1 Life :" +  veges.get(0).getFinalAge(),600, 50, paint);
+					canvas.drawText("Vege 2 Water : " +  veges.get(1).getWaterLevel(), 10, 100, paint);
+					canvas.drawText("Vege 2 Food : " +  veges.get(1).getFoodLevel(), 300, 100, paint);
+					canvas.drawText("Vege 2 Life :" +  veges.get(1).getFinalAge(),600, 100, paint);
+					//debug stats ends
+					
 					for(int i = 0; i<veges.size(); i++)
 					{
 						veges.get(i).drawVegetables(canvas, veges);	//need to implement this better so it's not a static method		

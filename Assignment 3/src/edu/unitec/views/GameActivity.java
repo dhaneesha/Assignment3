@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +31,10 @@ public class GameActivity extends Activity implements OnTouchListener {
 	private Vegetable vegeOne, vegeTwo;
 	private ArrayList<Vegetable> veges = new ArrayList<Vegetable>();
 	private GameManager gameManager;
-	private Vegetable selectedVege;	//The vegetable that was selected with the screen touch
 	private Intent intent;
 	private boolean vegeFound = false;
+	private CountDownTimer countdown;
+	Vegetable selectedVege;	//The vegetable that was selected with the screen touch
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,21 @@ public class GameActivity extends Activity implements OnTouchListener {
 		
 		Button btn = (Button) findViewById(R.id.btn_Feed);
 		btn.setOnTouchListener(this);
+		
+		countdown = new CountDownTimer(1000, 1000) {
+
+		     public void onTick(long millisUntilFinished) {
+		        //Log.d("Tic","seconds remaining: " + millisUntilFinished / 1000);
+		     }
+
+		     public void onFinish() {
+		    	 //Code to update
+		    	 veges.get(0).update ();
+				 veges.get(1).update ();
+		    	 this.start();
+		     }
+		  }.start();
+
 	}
 
 	@Override
@@ -131,10 +148,18 @@ public class GameActivity extends Activity implements OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
-		if (v.getId() == R.id.btn_Feed)
+		// Debug buttons 	
+		if (v.getId() == R.id.btn_Feed &&  event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			veges.get(0).resizeImage();
+			
 		}
+		
+		if (v.getId() == R.id.btn_Testing)
+		{
+			countdown.cancel();
+		}
+		
+		// Debug buttons end
 		
 		vegeFound = false;
 		
@@ -156,9 +181,6 @@ public class GameActivity extends Activity implements OnTouchListener {
 			intent.putExtra("personality", selectedVege.getPersonality());
 			intent.putExtra("type", selectedVege.getType());
 			
-			//Vegetable vege = new Vegetable();
-			//intent.putExtra("vegetable", vege);
-			
 			//intent.putExtra("size", selectedVege.getSize());
 			//intent.putExtra("mood", selectedVege.getMood());
 	  	  	this.startActivity(intent);
@@ -166,4 +188,5 @@ public class GameActivity extends Activity implements OnTouchListener {
 
 		return false;
 	}
+	
 }

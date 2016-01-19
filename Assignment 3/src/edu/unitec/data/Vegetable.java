@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 @SuppressWarnings("serial")
 public class Vegetable implements Serializable{
@@ -42,7 +43,7 @@ public class Vegetable implements Serializable{
 	//HUNGERRATE, THIRSTRATE
 	private double hungerRate; 
 	private double thirstRate; 
-	private double growthRate;	//Not used as at 17.1.16
+	private double growthRate;	// Higher number mean slower growth
 	
 	//PERSONALITY
 	public enum Personality {SASSY,	HARDY, TIMID}
@@ -53,6 +54,7 @@ public class Vegetable implements Serializable{
 	private double size;
 	private int growthMultiplierX; // This is a small value initialized during vegetable creation which is used set the image size by multiplying with the current size of vegetable 
 	private int growthMultiplierY;
+	private int growthCounter=1;
 	//STATUS
 	private String status;	//defaults to LIVING (two values are LIVING and DEAD)
 	private boolean dead = false;	//not used as at 17.1.16
@@ -156,9 +158,9 @@ public class Vegetable implements Serializable{
  		switch (type) {
 		case CABBAGE:
 			 this.finalAge = 100; 
-			 this.hungerRate = 1; 
-			 this.thirstRate = 1; 
-			 this.growthRate = 2;
+			 this.hungerRate = 0.1; 
+			 this.thirstRate = 0.1; 
+			 this.growthRate = 1;
 			 this.personality = Personality.HARDY; 
 			 this.size = 20;
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.cabbage);			 
@@ -166,8 +168,8 @@ public class Vegetable implements Serializable{
 		
 		case CARROT:
 			 this.finalAge = 50; 
-			 this.hungerRate = 5; 
-			 this.thirstRate = 5;
+			 this.hungerRate = 0.5; 
+			 this.thirstRate = 0.5;
 			 this.growthRate = 3; // was 3 but for debugging made this a bigger value to easily to see progress 
 			 this.personality = Personality.SASSY; 
 			 this.size = 13;
@@ -176,9 +178,9 @@ public class Vegetable implements Serializable{
 			
 		case POTATO:
 			 this.finalAge = 60; 
-			 this.hungerRate = 5; 
-			 this.thirstRate = 3;
-			 this.growthRate = 3;
+			 this.hungerRate = 0.4; 
+			 this.thirstRate = 0.3;
+			 this.growthRate = 4;
 			 this.personality = Personality.TIMID; 
 			 this.size = 12; 
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.potato);
@@ -186,9 +188,9 @@ public class Vegetable implements Serializable{
 		
 		case EGGPLANT:
 			 this.finalAge = 80; 
-			 this.hungerRate = 2; 
-			 this.thirstRate = 2;
-			 this.growthRate = 4;
+			 this.hungerRate = 0.2; 
+			 this.thirstRate = 0.2;
+			 this.growthRate = 3;
 			 this.personality = Personality.HARDY; 
 			 this.size = 18;
 			 this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eggplant);
@@ -207,9 +209,9 @@ public class Vegetable implements Serializable{
  		int imageWidth = vegetableImage.getWidth()/2;
  		int imageHeight =vegetableImage.getHeight()/2;
  		
- 		growthMultiplierX = vegetableImage.getWidth()/20;
- 		growthMultiplierY = vegetableImage.getHeight()/20;
- 		
+ 		growthMultiplierX = vegetableImage.getWidth()/40;
+ 		growthMultiplierY = vegetableImage.getHeight()/40;
+ 				
  		Random r = new Random();
  		int xPosOffset = r.nextInt(widthMax + 1);
  		if(xPosOffset + imageWidth >= widthMax)
@@ -240,14 +242,14 @@ public class Vegetable implements Serializable{
 	*/ 	
  	public void update ()
  	{
- 		this.finalAge -= 1;
+ 		this.finalAge -= 0.1;
  		this.foodLevel -= hungerRate;
  		this.waterLevel -= thirstRate;
- 		
+ 		Log.d("Testing", "Before Alive Code ");
  		if (!isDead())  // if vegetable is alive 
  		{
- 			grow (); // it grows
- 					 // image resizes by changing the rectangle size
+ 			Log.d("Testing", "Alive Code ");
+ 			grow (); // it grows image resizes by changing the rectangle size
  			calculateMood();
  		}
  	}
@@ -292,6 +294,7 @@ public class Vegetable implements Serializable{
  		if (waterLevel <=0	|| foodLevel <=0)
  		{
  			dead = true;
+ 			Log.d("Testing", "Dead vegetable");
  			return true;
  		}		
  		return false;
@@ -314,24 +317,36 @@ public class Vegetable implements Serializable{
  		waterLevel += water;
  	}
  	
-	/** 
-	* Increments the size of the Vegetable by adding the food range 
-	*/ 
- 	public void grow ()
- 	{
- 		size += growthRate;
- 	}
+//	/** 
+//	* Increments the size of the Vegetable by adding the food range 
+//	*/ 
+// 	public void grow ()
+// 	{
+// 		size += growthRate;
+// 	}
  	
 	/** 
 	* Increments the size of the Vegetable bitmap rescaling the rectangle
 	* Used for showing vegitable growth
 	*/ 
- 	public void  resizeImage()
+ 	public void  grow()
  	{
- 		boundingRect.left -= growthMultiplierX;
+ 		//boundingRect.left -= growthMultiplierX; // debug
  		//boundingRect.top -= growthMultiplierY;
  		//boundingRect.right += growthMultiplierX;
- 		boundingRect.bottom += growthMultiplierY;
+ 		//boundingRect.bottom += growthMultiplierY;
+
+ 		if (growthCounter == (int) growthRate)
+ 		{
+	 		boundingRect.right += growthMultiplierX;
+	 		boundingRect.bottom += growthMultiplierY;
+	 		growthCounter =1;
+ 		}
+ 		else
+ 		{
+ 	 		growthCounter++;
+ 		}
+ 		
  	}
  	
  	
@@ -485,22 +500,6 @@ public class Vegetable implements Serializable{
 	public void setThirstRate(double thirstRate){
 		this.thirstRate = thirstRate;
 	}
-
-//	public int getLocationX() {
-//		return locationX;
-//	}
-//
-//	public void setLocationX(int locationX) {
-//		this.locationX = locationX;
-//	}
-//
-//	public int getLocationY() {
-//		return locationY;
-//	}
-//
-//	public void setLocationY(int locationY) {
-//		this.locationY = locationY;
-//	}
 
 	public Rect getBoundingRect() {
 		return boundingRect;
