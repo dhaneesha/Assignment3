@@ -44,28 +44,30 @@ public final class R {
         public static final int activity_vertical_margin=0x7f070001;
     }
     public static final class drawable {
-        public static final int btn_sun=0x7f020000;
-        public static final int btn_water=0x7f020001;
-        public static final int cabbage=0x7f020002;
-        public static final int carrot=0x7f020003;
-        public static final int eaten_cabbage=0x7f020004;
-        public static final int eaten_carrot=0x7f020005;
-        public static final int eaten_eggplant=0x7f020006;
-        public static final int eaten_potato=0x7f020007;
-        public static final int eggplant=0x7f020008;
-        public static final int ground=0x7f020009;
-        public static final int groundovercsat=0x7f02000a;
-        public static final int ic_launcher=0x7f02000b;
-        public static final int mood_bar=0x7f02000c;
-        public static final int options_box=0x7f02000d;
-        public static final int overcast=0x7f02000e;
-        public static final int potato=0x7f02000f;
-        public static final int sky=0x7f020010;
-        public static final int stats_bar=0x7f020011;
-        public static final int sun=0x7f020012;
-        public static final int tomb=0x7f020013;
-        public static final int tombstone_shape=0x7f020014;
-        public static final int water_drop=0x7f020015;
+        public static final int background_mountain=0x7f020000;
+        public static final int background_sky=0x7f020001;
+        public static final int btn_sun=0x7f020002;
+        public static final int btn_water=0x7f020003;
+        public static final int cabbage=0x7f020004;
+        public static final int carrot=0x7f020005;
+        public static final int eaten_cabbage=0x7f020006;
+        public static final int eaten_carrot=0x7f020007;
+        public static final int eaten_eggplant=0x7f020008;
+        public static final int eaten_potato=0x7f020009;
+        public static final int eggplant=0x7f02000a;
+        public static final int ground=0x7f02000b;
+        public static final int groundovercsat=0x7f02000c;
+        public static final int ic_launcher=0x7f02000d;
+        public static final int mood_bar=0x7f02000e;
+        public static final int options_box=0x7f02000f;
+        public static final int overcast=0x7f020010;
+        public static final int potato=0x7f020011;
+        public static final int sky=0x7f020012;
+        public static final int stats_bar=0x7f020013;
+        public static final int sun=0x7f020014;
+        public static final int tomb=0x7f020015;
+        public static final int tombstone_shape=0x7f020016;
+        public static final int water_drop=0x7f020017;
     }
     public static final class id {
         public static final int action_exit=0x7f0b0019;

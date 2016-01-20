@@ -25,7 +25,7 @@ import edu.unitec.data.Vegetable.VegetableType;
 public class StatsActivity extends Activity implements OnTouchListener {
 
 	private View statsView;
-	private int age, waterLevel, foodLevel, feedAmount = 10, waterAmount=10;
+	private int age, waterLevel, foodLevel, feedAmount = 50, waterAmount=50;
 	private Personality personality; 
 	private Mood mood;
 	private VegetableType type;	

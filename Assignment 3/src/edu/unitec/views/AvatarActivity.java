@@ -128,7 +128,7 @@ public class AvatarActivity extends Activity implements OnTouchListener {
 					break;
 				}
 			
-			if(picked == numberOfVeges)
+			if(picked == numberOfVeges) // controlles the number of vegetables picked 
 			{	
 				newGame = true;
 				intent = new Intent(AvatarActivity.this, GameActivity.class);

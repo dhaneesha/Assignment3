@@ -62,7 +62,7 @@ public class Vegetable {
 
 	//STATUS
 	private String status;	//defaults to LIVING (two values are LIVING and DEAD)
-	private boolean dead = false;	//not used as at 17.1.16
+	private boolean dead = false;	
 	private boolean eaten=false;
 
 	//CONDITION
@@ -155,13 +155,14 @@ public class Vegetable {
 	/** 
 	* Setup unique values depending on vegetable type.
 	* and the default values for vegetables
+	* Unique values are initialized here
 	*/ 	
  	private void setVegetableStats()
  	{				
  		switch (type) {
 		case CABBAGE:
 			this.finalAge = 100; 
-			this.hungerRate = 0.1; 
+			this.hungerRate = 0.01; 
 			this.thirstRate = 0.1; 
 			this.growthRate = 2;
 			this.personality = Personality.HARDY; 
@@ -171,7 +172,7 @@ public class Vegetable {
 		
 		case CARROT:
 			this.finalAge = 50; 
-			this.hungerRate = 0.5; 
+			this.hungerRate = 0.05; 
 			this.thirstRate = 0.5;
 			this.growthRate = 4; // was 3 but for debugging made this a bigger value to easily to see progress 
 			this.personality = Personality.AGGRESIVE; 
@@ -181,8 +182,8 @@ public class Vegetable {
 			
 		case POTATO:
 			this.finalAge = 60; 
-			this.hungerRate = 0.4; 
-			this.thirstRate = 0.3;
+			this.hungerRate = 0.04; 
+			this.thirstRate = 0.03;
 			this.growthRate = 5;
 			this.personality = Personality.TIMID; 
 			this.size = 6; 
@@ -191,8 +192,8 @@ public class Vegetable {
 		
 		case EGGPLANT:
 			this.finalAge = 80; 
-			this.hungerRate = 0.2; 
-			this.thirstRate = 0.2;
+			this.hungerRate = 0.02; 
+			this.thirstRate = 0.02;
 			this.growthRate = 3;
 			this.personality = Personality.HARDY; 
 			this.size = 18;
@@ -217,8 +218,8 @@ public class Vegetable {
  		int imageWidth = vegetableImage.getWidth()/2;
  		int imageHeight =vegetableImage.getHeight()/2;
  		
- 		growthMultiplierX = vegetableImage.getWidth()/40;
- 		growthMultiplierY = vegetableImage.getHeight()/40;
+ 		growthMultiplierX = vegetableImage.getWidth()/20;
+ 		growthMultiplierY = vegetableImage.getHeight()/20;
  				
  		Random r = new Random();
  		int xPosOffset = r.nextInt(widthMax + 1);
@@ -230,9 +231,6 @@ public class Vegetable {
  		{
  			xPosOffset += imageWidth;
  		}
- 		
- 		//Not sure why the values had to be multiplied at this point
- 		//setBoundingRect(new Rect(xPosOffset,heightMax-vegetableImage.getHeight()*3,xPosOffset+vegetableImage.getWidth(), heightMax-vegetableImage.getHeight()*2));
  		
  		setBoundingRect(new Rect(xPosOffset - (imageWidth/2),(heightMax/2) - imageHeight /2,xPosOffset + (imageWidth/2),(heightMax/2) + imageHeight /2)); 		
  	}
@@ -288,7 +286,7 @@ public class Vegetable {
  			setMood(Mood.HAPPY);
  		}
  		
- 		if (score >= 100)
+ 		else if (score >= 100)
  		{
  			setMood(Mood.OK);
  		}
@@ -298,7 +296,7 @@ public class Vegetable {
  			setMood(Mood.SAD);
  		}
  		
- 		if (foodLevel < 5)
+ 		if (foodLevel < 15)
  		{
  			setMood(Mood.ANGRY);
  			setCannibalistic(true);
@@ -317,7 +315,6 @@ public class Vegetable {
  		if (waterLevel <=0	|| foodLevel <=0)
  		{
  			dead = true;
- 			//Log.d("Testing", "Dead vegetable");
  			finalAge =0; 
  			return true;
  		}		
@@ -329,8 +326,12 @@ public class Vegetable {
 	*/ 
  	public void feed (int food)
  	{
- 		if(foodLevel + food <= maxFoodLevel)
- 			this.foodLevel += food;
+ 		if(foodLevel + food <= maxFoodLevel) // Controlling the food level 
+ 			this.foodLevel += food;		
+ 		else
+ 		{
+ 			this.foodLevel = maxFoodLevel; 
+ 		}
  	}
  	
 	/** 
@@ -347,17 +348,17 @@ public class Vegetable {
 	* Increments the size of the Vegetable bitmap rescaling the rectangle
 	* Used for showing vegitable growth
 	*/ 
- 	public void  grow()
+ 	public void  grow() // this controlls how fast a vegetable grows
  	{
- 		if (growthCounter == (int) growthRate)
+ 		if (growthCounter == (int) growthRate) // when the growth rate reaches growth counter value the  vegetable wil grow
  		{
-			boundingRect.right += growthMultiplierX;
-			boundingRect.bottom += growthMultiplierY;
-			growthCounter =1;
+			boundingRect.right += growthMultiplierX; // two values are used to maintain the aspect ratio of the vegetable bitmap
+			boundingRect.bottom += growthMultiplierY; // with each time a vegetaable grow the size of the boundingRect will get bigger
+			growthCounter =1;							// and growth counnter will be set back to one 
  		}
  		else
  		{
- 			growthCounter++;
+ 			growthCounter++; // If the vegetable didnt grow the growh counter increases till its ready to grow (till growthCounter == growthRate)
  		}		
  	}
  	
@@ -366,12 +367,14 @@ public class Vegetable {
 	*/
  	public void checkGrowthRate()
  	{		
-		if (waterLevel < maxWaterLevel/2 || foodLevel < maxFoodLevel/2)
+		if (waterLevel < maxWaterLevel/2 || foodLevel < maxFoodLevel/2)  // if food level is at a 50% the vegetable will not grow very rapidly 
 		{
-			growthRate *=2;
-			growthHindered = true;
+			growthRate *=2;			// this is achived by multiplying the growth counter by 2 
+									// When growth rate 2X  higher this mean the update method has to be called two times the growth valueto have one grow cycle
+									// This effectivly cuts down growth in half
+			growthHindered = true;	// & sets this variable to make sure the code runs smooth 
 		}
-		else if (growthHindered)
+		else if (growthHindered) // If water and food level is back to over 50 then normal grow conditions apply
 		{
 			growthRate /=2;
 			growthHindered = false;
@@ -385,33 +388,38 @@ public class Vegetable {
 	*/
  	public void cannibalPoints()
  	{
- 		setCanibalPoints(0);
+ 		setCanibalPoints(0); // reset previously set points
  		switch (personality) {
 		case AGGRESIVE:
-			setCanibalPoints(getCanibalPoints() + 50); // 
+			setCanibalPoints(getCanibalPoints() + 50); // aggresive vegetables get more points to improve their chance of eating another vegatable like in real life
 			break;			
 		
 		case HARDY:
-			setCanibalPoints(getCanibalPoints() + 40); // 
+			setCanibalPoints(getCanibalPoints() + 40); // Hardy ones are are also quite likly to cannibalize
 			break;	
 			
 		case TIMID:
-			setCanibalPoints(getCanibalPoints() + 10);
+			setCanibalPoints(getCanibalPoints() + 10); // Timed is scaread and most likely wont eat anything else
 			break;
 
 		default:
 			break;
 		}
  		
- 		setCanibalPoints(getCanibalPoints() + foodLevel+waterLevel); 		
+ 		setCanibalPoints(getCanibalPoints() + foodLevel+waterLevel); // setting the new points	(The current water level and food directly effects a vegetabless capacity to canibalize)	
  	}
  	
 	/** 
-	* Changes the images of the eaten veges
+	* Onece a vegetable has been eaten its appearance changes to the image of the eaten vegetable with a chunk missing
 	*/
  	public void setEatenVegetables()
  	{
- 		switch (type) {
+ 		if (! eaten) // checks weather the vegetable was eaten
+ 		{
+ 			return;
+ 		}
+ 		switch (type) 
+ 		{ // If it was eaten assignes the proper image depending on the vegetable type
 		case CARROT:
 			this.vegetableImage = BitmapFactory.decodeResource(activity.getResources(), edu.unitec.assignment3.R.drawable.eaten_carrot);
 			break;			
@@ -430,8 +438,7 @@ public class Vegetable {
 			
 		default:
 			break;
-		}
- 		
+		} 		
  		setCanibalPoints(getCanibalPoints() + foodLevel+waterLevel); 		
  	}
  	
@@ -605,8 +612,15 @@ public class Vegetable {
 	public void setEaten(boolean eaten) {
 		this.eaten = eaten;
 	}
+	
+	public boolean getEaten() {
+		return this.eaten ;
+	}
 
 	public void setDead(boolean dead) {
 		this.dead = dead;
+	}
+	public boolean getDead() {
+		return this.dead ;
 	}
 }
